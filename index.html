@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
+  <link rel="preload" as="image" href="assets/hero-640.webp" fetchpriority="high" />
+
   <!-- URL canônica do site em produção (ajuste se o domínio for outro) -->
   <link rel="canonical" href="https://ranieldybikefit.com.br/" />
 
@@ -24,16 +26,16 @@
   <meta property="og:description" content="Bike Fit presencial em Brasília com análise de movimento (LEOMO + Velogic Studio), formação EBBT e laudo digital. Mais conforto, menos dor e melhor performance no pedal." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ranieldybikefit.com.br/" />
-  <meta property="og:image" content="https://ranieldybikefit.com.br/assets/og-image.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image" content="https://ranieldybikefit.com.br/assets/hero-1280.webp" />
+  <meta property="og:image:width" content="1280" />
+  <meta property="og:image:height" content="853" />
   <meta property="og:image:alt" content="Bike Fit profissional em Brasília — Ranieldy Mendes" />
 
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Bike Fit em Brasília | Ranieldy Mendes — EBBT" />
   <meta name="twitter:description" content="Ajuste biomecânico presencial com LEOMO, Velogic Studio e laudo em PDF. Agende em Brasília." />
-  <meta name="twitter:image" content="https://ranieldybikefit.com.br/assets/og-image.jpg" />
+  <meta name="twitter:image" content="https://ranieldybikefit.com.br/assets/hero-1280.webp" />
 
   <link rel="alternate" hreflang="pt-BR" href="https://ranieldybikefit.com.br/" />
   <link rel="alternate" hreflang="x-default" href="https://ranieldybikefit.com.br/" />
@@ -61,7 +63,7 @@
         "alternateName": "Bike Fit Brasília — Ranieldy Mendes",
         "description": "Serviço de Bike Fit presencial: análise da pedalada com LEOMO e Velogic Studio, ajuste de selim, guidão e sapatilha, relatório em PDF. Atendimento em Brasília, Distrito Federal.",
         "url": "https://ranieldybikefit.com.br/",
-        "image": "https://ranieldybikefit.com.br/assets/og-image.jpg",
+        "image": "https://ranieldybikefit.com.br/assets/hero-1280.webp",
         "logo": "https://ranieldybikefit.com.br/assets/logo.png",
         "email": "contato@ranieldybikefit.com.br",
         "areaServed": {
@@ -96,16 +98,18 @@
   }
   </script>
 
-  <!-- Fonts -->
+  <!-- Fonts (carrega sem bloquear render — aplica em "all" após parse) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Syne:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet" />
-
-  <!-- Icons (Lucide via CDN) -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Syne:wght@400;500;600;700&family=Space+Mono&display=swap"
+    media="print"
+    onload="this.media='all'"
+  />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Syne:wght@400;500;600;700&family=Space+Mono&display=swap" />
+  </noscript>
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -182,7 +186,20 @@
          HERO
          ============================================================ -->
     <section class="hero" id="hero" aria-label="Seção principal">
-      <div class="hero__bg" role="img" aria-label="Ciclista em alta performance"></div>
+      <div class="hero__media" aria-hidden="true">
+        <picture>
+          <source type="image/webp" srcset="assets/hero-640.webp 640w, assets/hero-960.webp 960w, assets/hero-1280.webp 1280w" sizes="100vw" />
+          <img
+            class="hero__img"
+            src="assets/hero-960.webp"
+            width="1280"
+            height="853"
+            alt=""
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
+      </div>
       <div class="hero__lines" aria-hidden="true"></div>
       <div class="hero__overlay" aria-hidden="true"></div>
       <div class="container">
@@ -333,6 +350,7 @@
             <img src="assets/bikefit-servico-visual.png"
                  alt="Ciclista em bike de estrada com sobreposição digital de análise de movimento e ângulos corporais em sessão de BikeFit profissional"
                  loading="lazy"
+                 decoding="async"
                  width="528"
                  height="750" />
             <div class="whatis__stat">
@@ -504,6 +522,7 @@
             <img src="assets/ranieldy.png"
                  alt="Ranieldy Mendes, Bike Fitter, em atendimento profissional"
                  loading="lazy"
+                 decoding="async"
                  width="528"
                  height="750" />
           </div>
@@ -724,12 +743,9 @@
     </svg>
   </a>
 
-  <!-- Scripts -->
+  <!-- Scripts (defer: não bloqueiam parsing; ordem mantém global supabase antes do main) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.min.js"></script>
+  <script defer src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
   <script type="module" src="main.js"></script>
-
-  <script>
-    // Inicializa ícones Lucide
-    lucide.createIcons();
-  </script>
 </body>
 </html>

@@ -3,5 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/
 
-# Substitua pelo domínio real antes do deploy
-Sitemap: https://seudominio.com.br/sitemap.xml
+Sitemap: https://ranieldybikefit.com.br/sitemap.xml
