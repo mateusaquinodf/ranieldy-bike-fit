@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir C:\\\\Users\\\\Mateus Aquino\\\\Documents\\\\Ranieldy Bike Fit:*)",
+      "Bash(cmd:*)"
+    ]
+  }
+}

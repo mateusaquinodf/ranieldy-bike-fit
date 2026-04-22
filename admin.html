@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Admin — BikeFit</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Syne:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet" />
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="admin-body">
+
+  <!-- ============================================================
+       TELA DE LOGIN
+       ============================================================ -->
+  <div id="login-screen" class="admin-login">
+    <div class="admin-login__box">
+      <div class="admin-login__logo">
+        <img src="assets/logo.png" alt="BikeFit" class="brand-logo brand-logo--admin-login" width="176" height="32" decoding="async" />
+      </div>
+      <p class="admin-login__subtitle">Painel Administrativo — acesso restrito</p>
+
+      <div class="admin-login__error" id="login-error" role="alert"></div>
+
+      <form id="login-form" novalidate>
+        <div class="form__group">
+          <label class="form__label" for="login-email">E-mail</label>
+          <input id="login-email" class="form__input" type="email" placeholder="admin@exemplo.com" required autocomplete="email" />
+        </div>
+        <div class="form__group">
+          <label class="form__label" for="login-password">Senha</label>
+          <input id="login-password" class="form__input" type="password" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn--primary btn--full" id="login-btn">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PAINEL PRINCIPAL
+       ============================================================ -->
+  <div id="admin-app" style="display:none; width:100%; display:none">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" role="navigation" aria-label="Menu administrativo">
+      <div class="admin-sidebar__brand">
+        <img src="assets/logo.png" alt="BikeFit" class="brand-logo brand-logo--sidebar" width="128" height="24" decoding="async" />
+        <small class="admin-sidebar__brand-tag">Admin</small>
+      </div>
+
+      <nav class="admin-sidebar__nav">
+        <button class="admin-nav-item active" data-panel="bookings" aria-current="page">
+          <span class="admin-nav-item__icon">🗓️</span> Agendamentos
+        </button>
+        <button class="admin-nav-item" data-panel="availability">
+          <span class="admin-nav-item__icon">⏰</span> Disponibilidade
+        </button>
+        <button class="admin-nav-item" data-panel="testimonials">
+          <span class="admin-nav-item__icon">💬</span> Depoimentos
+        </button>
+        <button class="admin-nav-item" data-panel="faq">
+          <span class="admin-nav-item__icon">❓</span> FAQ
+        </button>
+        <button class="admin-nav-item" data-panel="content">
+          <span class="admin-nav-item__icon">📝</span> Textos da LP
+        </button>
+        <button class="admin-nav-item" data-panel="settings">
+          <span class="admin-nav-item__icon">⚙️</span> Contato &amp; Redes
+        </button>
+      </nav>
+
+      <div class="admin-sidebar__footer">
+        <button class="btn btn--outline btn--sm btn--full" id="logout-btn">Sair</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <h1 class="admin-topbar__title" id="panel-title">Agendamentos</h1>
+        <div class="admin-topbar__user">
+          <span id="admin-email-display"></span>
+        </div>
+      </header>
+
+      <div class="admin-content">
+
+        <!-- ======================================================
+             PAINEL: AGENDAMENTOS
+             ====================================================== -->
+        <div class="admin-panel active" id="panel-bookings">
+          <p class="admin-section-subtitle">Visualize e gerencie todos os agendamentos recebidos.</p>
+
+          <div class="admin-filters">
+            <label>Filtrar por status:
+              <select id="filter-status" class="form__select" style="margin-left:8px">
+                <option value="">Todos</option>
+                <option value="pendente">Pendente</option>
+                <option value="confirmado">Confirmado</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+            </label>
+            <label>Data:
+              <input type="date" id="filter-date" style="margin-left:8px" />
+            </label>
+            <button class="btn btn--outline btn--sm" id="filter-clear">Limpar</button>
+            <button class="btn btn--outline btn--sm" id="export-csv" style="margin-left:auto">⬇ Exportar CSV</button>
+          </div>
+
+          <div class="admin-table-wrapper">
+            <table class="admin-table" aria-label="Tabela de agendamentos">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th>Telefone</th>
+                  <th>Modalidade</th>
+                  <th>Data</th>
+                  <th>Horário</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="bookings-tbody">
+                <tr><td colspan="8" style="text-align:center;padding:32px;color:var(--color-text-muted)">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================
+             PAINEL: DISPONIBILIDADE
+             ====================================================== -->
+        <div class="admin-panel" id="panel-availability">
+          <p class="admin-section-subtitle">Gerencie os dias e horários disponíveis para agendamento.</p>
+
+          <div class="avail-calendar">
+            <div class="admin-card">
+              <div class="admin-card__title">Adicionar slot</div>
+              <div class="admin-card__subtitle">Habilite uma data e horário para agendamento</div>
+              <form id="slot-form">
+                <div class="form__group">
+                  <label class="form__label" for="slot-date">Data</label>
+                  <input type="date" id="slot-date" class="form__input" required />
+                </div>
+                <div class="form__group">
+                  <label class="form__label" for="slot-time">Horário</label>
+                  <input type="time" id="slot-time" class="form__input" required step="1800" />
+                </div>
+                <div class="form__group">
+                  <label class="form__label" for="slot-max">Vagas simultâneas</label>
+                  <input type="number" id="slot-max" class="form__input" value="1" min="1" max="10" />
+                </div>
+                <button type="submit" class="btn btn--primary btn--full">Adicionar Slot</button>
+              </form>
+            </div>
+
+            <div>
+              <div class="admin-card__title" style="margin-bottom:16px">Slots cadastrados</div>
+              <div class="admin-filters">
+                <label>Filtrar por data:
+                  <input type="date" id="avail-filter-date" style="margin-left:8px" />
+                </label>
+              </div>
+              <div class="avail-slots-list" id="slots-list">
+                <p style="color:var(--color-text-muted)">Carregando...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================================================
+             PAINEL: DEPOIMENTOS
+             ====================================================== -->
+        <div class="admin-panel" id="panel-testimonials">
+          <p class="admin-section-subtitle">Gerencie os depoimentos exibidos na landing page.</p>
+
+          <div class="admin-card">
+            <div class="admin-card__title" id="testimonial-form-title">Adicionar Depoimento</div>
+            <form id="testimonial-form">
+              <input type="hidden" id="t-id" />
+              <div class="form__row">
+                <div class="form__group">
+                  <label class="form__label" for="t-name">Nome *</label>
+                  <input id="t-name" class="form__input" type="text" required />
+                </div>
+                <div class="form__group">
+                  <label class="form__label" for="t-modality">Modalidade *</label>
+                  <input id="t-modality" class="form__input" type="text" placeholder="Ex: Ciclismo de Estrada" required />
+                </div>
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="t-text">Depoimento *</label>
+                <textarea id="t-text" class="form__textarea" style="min-height:100px" required></textarea>
+              </div>
+              <div class="form__group">
+                <label class="form__label">Nota</label>
+                <div class="star-rating" id="star-rating">
+                  <input type="radio" name="rating" id="star5" value="5" checked /><label for="star5">★</label>
+                  <input type="radio" name="rating" id="star4" value="4" /><label for="star4">★</label>
+                  <input type="radio" name="rating" id="star3" value="3" /><label for="star3">★</label>
+                  <input type="radio" name="rating" id="star2" value="2" /><label for="star2">★</label>
+                  <input type="radio" name="rating" id="star1" value="1" /><label for="star1">★</label>
+                </div>
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="t-photo">URL da foto (opcional)</label>
+                <input id="t-photo" class="form__input" type="url" placeholder="https://..." />
+              </div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <button type="submit" class="btn btn--primary">Salvar</button>
+                <button type="button" class="btn btn--outline btn--sm" id="t-cancel" style="display:none">Cancelar</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="admin-table-wrapper" style="margin-top:8px">
+            <table class="admin-table" aria-label="Lista de depoimentos">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Modalidade</th>
+                  <th>Nota</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="testimonials-tbody">
+                <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--color-text-muted)">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================
+             PAINEL: FAQ
+             ====================================================== -->
+        <div class="admin-panel" id="panel-faq">
+          <p class="admin-section-subtitle">Gerencie as perguntas e respostas do FAQ.</p>
+
+          <div class="admin-card">
+            <div class="admin-card__title" id="faq-form-title">Adicionar Pergunta</div>
+            <form id="faq-form">
+              <input type="hidden" id="faq-id" />
+              <div class="form__group">
+                <label class="form__label" for="faq-question">Pergunta *</label>
+                <input id="faq-question" class="form__input" type="text" required />
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="faq-answer">Resposta *</label>
+                <textarea id="faq-answer" class="form__textarea" style="min-height:100px" required></textarea>
+              </div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <button type="submit" class="btn btn--primary">Salvar</button>
+                <button type="button" class="btn btn--outline btn--sm" id="faq-cancel" style="display:none">Cancelar</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="admin-table-wrapper" style="margin-top:8px">
+            <table class="admin-table" aria-label="Lista de perguntas FAQ">
+              <thead>
+                <tr>
+                  <th>Pergunta</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="faq-tbody">
+                <tr><td colspan="3" style="text-align:center;padding:32px;color:var(--color-text-muted)">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================
+             PAINEL: TEXTOS DA LP
+             ====================================================== -->
+        <div class="admin-panel" id="panel-content">
+          <p class="admin-section-subtitle">Edite os textos principais da landing page. As alterações refletem imediatamente sem rebuild.</p>
+
+          <form id="content-form">
+            <div class="admin-card">
+              <div class="admin-card__title">Seção Hero</div>
+              <div class="form__group">
+                <label class="form__label" for="c-hero-headline">Headline principal</label>
+                <input id="c-hero-headline" class="form__input" type="text" data-key="hero_headline" />
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="c-hero-subheadline">Subheadline</label>
+                <textarea id="c-hero-subheadline" class="form__textarea" data-key="hero_subheadline"></textarea>
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="c-hero-badge">Badge de localização</label>
+                <input id="c-hero-badge" class="form__input" type="text" data-key="hero_badge" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn--primary">Salvar Textos</button>
+          </form>
+        </div>
+
+        <!-- ======================================================
+             PAINEL: CONFIGURAÇÕES
+             ====================================================== -->
+        <div class="admin-panel" id="panel-settings">
+          <p class="admin-section-subtitle">Atualize os dados de contato e redes sociais exibidos no site.</p>
+
+          <form id="settings-form">
+            <div class="admin-card">
+              <div class="admin-card__title">Contato</div>
+              <div class="form__row">
+                <div class="form__group">
+                  <label class="form__label" for="s-whatsapp">WhatsApp (somente números)</label>
+                  <input id="s-whatsapp" class="form__input" type="text" placeholder="5511999999999" data-key="whatsapp" />
+                </div>
+                <div class="form__group">
+                  <label class="form__label" for="s-email">E-mail de contato</label>
+                  <input id="s-email" class="form__input" type="email" data-key="email" />
+                </div>
+              </div>
+              <div class="form__row">
+                <div class="form__group">
+                  <label class="form__label" for="s-address">Endereço / Cidade</label>
+                  <input id="s-address" class="form__input" type="text" data-key="address" />
+                </div>
+                <div class="form__group">
+                  <label class="form__label" for="s-city">Cidade</label>
+                  <input id="s-city" class="form__input" type="text" data-key="city" />
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card__title">Redes Sociais</div>
+              <div class="form__group">
+                <label class="form__label" for="s-instagram">Instagram (URL completa)</label>
+                <input id="s-instagram" class="form__input" type="url" data-key="instagram" />
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="s-strava">Strava (URL completa)</label>
+                <input id="s-strava" class="form__input" type="url" data-key="strava" />
+              </div>
+              <div class="form__group">
+                <label class="form__label" for="s-youtube">YouTube (URL completa)</label>
+                <input id="s-youtube" class="form__input" type="url" data-key="youtube" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn--primary">Salvar Configurações</button>
+          </form>
+        </div>
+
+      </div><!-- /admin-content -->
+    </div><!-- /admin-main -->
+
+  </div><!-- /admin-app -->
+
+  <!-- ============================================================
+       MODAL DE CONFIRMAÇÃO
+       ============================================================ -->
+  <div class="modal-overlay" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <h2 class="modal__title" id="modal-title">Confirmar ação</h2>
+      <p class="modal__text" id="modal-text">Esta ação não pode ser desfeita. Deseja continuar?</p>
+      <div class="modal__actions">
+        <button class="btn btn--outline btn--sm" id="modal-cancel">Cancelar</button>
+        <button class="btn btn--primary btn--sm" id="modal-confirm">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="admin-toast" role="status" aria-live="polite">
+    <span class="toast__icon"></span>
+    <span class="toast__msg"></span>
+  </div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

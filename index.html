@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>BikeFit Profissional — Ranieldy | Ajuste Biomecânico para Ciclistas</title>
+  <meta name="description" content="BikeFit presencial e profissional. Pedale com mais conforto, menos dor e mais performance. Agende sua sessão online." />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content="BikeFit Profissional — Ranieldy" />
+  <meta property="og:description" content="Ajuste biomecânico profissional para ciclistas de todos os níveis. Agende sua sessão." />
+  <meta property="og:type"        content="website" />
+  <meta property="og:image"       content="assets/og-image.jpg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Syne:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet" />
+
+  <!-- Icons (Lucide via CDN) -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Grain texture overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <div class="cursor--ring" id="cursor-ring" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       NAVBAR
+       ============================================================ -->
+  <header class="navbar" id="navbar" role="banner">
+    <div class="container navbar__inner">
+      <a href="#" class="navbar__logo" aria-label="BikeFit — Início">
+        <img src="assets/logo.png" alt="BikeFit" class="brand-logo brand-logo--nav" width="200" height="48" decoding="async" />
+      </a>
+
+      <nav class="navbar__nav" aria-label="Navegação principal">
+        <a href="#servico">Serviço</a>
+        <a href="#como-funciona">Como Funciona</a>
+        <a href="#depoimentos">Depoimentos</a>
+        <a href="#agendamento">Agendar</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <a href="#agendamento" class="btn btn--primary btn--sm navbar__cta" aria-label="Agendar sessão de BikeFit">
+        Agendar Agora
+      </a>
+
+      <button type="button" class="navbar__hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">
+        <span class="navbar__hamburger-bar" aria-hidden="true"></span>
+        <span class="navbar__hamburger-bar" aria-hidden="true"></span>
+        <span class="navbar__hamburger-bar" aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile drawer -->
+  <div class="navbar__overlay" id="overlay" aria-hidden="true"></div>
+  <nav class="navbar__drawer" id="drawer" aria-labelledby="drawer-title" aria-hidden="true">
+    <div class="navbar__drawer-header">
+      <span class="navbar__drawer-title" id="drawer-title">Navegação</span>
+      <button type="button" class="navbar__drawer-close" id="drawer-close" aria-label="Fechar menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="navbar__drawer-links">
+      <a href="#servico">Serviço</a>
+      <a href="#como-funciona">Como Funciona</a>
+      <a href="#depoimentos">Depoimentos</a>
+      <a href="#agendamento">Agendar</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="navbar__drawer-footer">
+      <a href="#agendamento" class="btn btn--primary btn--full navbar__drawer-cta">Agendar Agora</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section class="hero" id="hero" aria-label="Seção principal">
+      <div class="hero__bg" role="img" aria-label="Ciclista em alta performance"></div>
+      <div class="hero__lines" aria-hidden="true"></div>
+      <div class="hero__overlay" aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero__content">
+          <div class="hero__accent-bar" aria-hidden="true"></div>
+          <div class="hero__badge" id="hero-badge">
+            ✓ Atendimento Presencial · Carregando...
+          </div>
+          <h1 class="hero__headline" id="hero-headline">
+            Seu corpo merece<br /><em>a posição certa.</em>
+          </h1>
+          <p class="hero__subheadline" id="hero-subheadline">
+            BikeFit profissional e presencial para ciclistas que querem pedalar mais, com menos dor e mais performance.
+          </p>
+          <div class="hero__actions">
+            <a href="#agendamento" class="btn btn--primary" aria-label="Ir para agendamento">
+              <i data-lucide="calendar-check" aria-hidden="true"></i>
+              Agendar minha sessão
+            </a>
+            <a href="#servico" class="btn btn--outline" aria-label="Saiba mais sobre BikeFit">
+              <span>Saiba mais</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="hero__scroll" aria-hidden="true">
+        <div class="hero__scroll-line"></div>
+        <span class="hero__scroll-text">Scroll</span>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         O QUE É BIKEFIT
+         ============================================================ -->
+    <section class="section" id="servico" aria-labelledby="servico-title">
+      <div class="container">
+        <div class="whatis__grid">
+          <div>
+            <span class="section__label">O que é</span>
+            <h2 class="section__title" id="servico-title">BikeFit<br />Profissional</h2>
+            <p class="section__subtitle">
+              BikeFit é a análise e ajuste biomecânico da posição do ciclista na bicicleta. Uma posição correta transforma completamente sua experiência no pedal.
+            </p>
+
+            <div class="whatis__pillars">
+              <div class="pillar reveal">
+                <div class="pillar__icon" aria-hidden="true">🛡️</div>
+                <div>
+                  <span class="pillar__number">01 — Lesões</span>
+                  <h3 class="pillar__title">Prevenção de Lesões</h3>
+                  <p class="pillar__text">Elimine dores no joelho, lombar, pescoço e quadril causadas por posição inadequada.</p>
+                </div>
+              </div>
+              <div class="pillar reveal">
+                <div class="pillar__icon" aria-hidden="true">⚡</div>
+                <div>
+                  <span class="pillar__number">02 — Resultado</span>
+                  <h3 class="pillar__title">Performance</h3>
+                  <p class="pillar__text">Maximize a transferência de força para o pedal com a posição biomecânica ideal para seu corpo.</p>
+                </div>
+              </div>
+              <div class="pillar reveal">
+                <div class="pillar__icon" aria-hidden="true">😌</div>
+                <div>
+                  <span class="pillar__number">03 — Bem-estar</span>
+                  <h3 class="pillar__title">Conforto</h3>
+                  <p class="pillar__text">Pedale por horas sem desconforto — seja no cotidiano urbano ou em longas distâncias.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="whatis__visual reveal">
+            <img src="https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=800&auto=format&fit=crop&q=80"
+                 alt="Profissional realizando análise de BikeFit em ciclista"
+                 loading="lazy"
+                 width="600"
+                 height="750" />
+            <div class="whatis__stat">
+              <div>
+                <div class="whatis__stat-number">+3h</div>
+                <div class="whatis__stat-label">de análise<br />detalhada</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PARA QUEM É
+         ============================================================ -->
+    <section class="section forwhom" id="para-quem" aria-labelledby="paraquem-title">
+      <div class="container">
+        <span class="section__label">Para quem é</span>
+        <h2 class="section__title" id="paraquem-title">Seu BikeFit,<br />seu perfil</h2>
+        <p class="section__subtitle">Atendemos ciclistas de todas as modalidades e níveis de experiência.</p>
+
+        <div class="forwhom__grid">
+          <div class="profile-card reveal" data-num="01" tabindex="0">
+            <span class="profile-card__tag">Amador</span>
+            <h3 class="profile-card__title">Ciclista Amador</h3>
+            <p class="profile-card__pain">Dor no joelho, costas ou pescoço</p>
+            <p class="profile-card__text">Você pedala por prazer e saúde, mas as dores estão te impedindo. O BikeFit identifica e corrige a origem do problema.</p>
+          </div>
+          <div class="profile-card reveal" data-num="02" tabindex="0">
+            <span class="profile-card__tag">Competição</span>
+            <h3 class="profile-card__title">Atleta Profissional</h3>
+            <p class="profile-card__pain">Perda de performance</p>
+            <p class="profile-card__text">Cada watt conta. Ajustamos sua posição para máxima eficiência aerodinâmica e transferência de força.</p>
+          </div>
+          <div class="profile-card reveal" data-num="03" tabindex="0">
+            <span class="profile-card__tag">Multisport</span>
+            <h3 class="profile-card__title">Triatleta</h3>
+            <p class="profile-card__pain">Eficiência nas três modalidades</p>
+            <p class="profile-card__text">No triathlon a posição no ciclismo precisa preservar os músculos para a corrida. Ajustamos com esse equilíbrio em mente.</p>
+          </div>
+          <div class="profile-card reveal" data-num="04" tabindex="0">
+            <span class="profile-card__tag">Urbano</span>
+            <h3 class="profile-card__title">Ciclista Urbano</h3>
+            <p class="profile-card__pain">Desconforto no cotidiano</p>
+            <p class="profile-card__text">Use a bike no dia a dia sem dores. Um ajuste correto torna o pedal urbano mais seguro, eficiente e confortável.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         COMO FUNCIONA
+         ============================================================ -->
+    <section class="section" id="como-funciona" aria-labelledby="comofunciona-title">
+      <div class="container">
+        <span class="section__label">O processo</span>
+        <h2 class="section__title" id="comofunciona-title">Como funciona<br />sua sessão</h2>
+        <p class="section__subtitle">Da chegada ao relatório final — um processo completo e transparente.</p>
+
+        <div class="howworks__steps">
+          <div class="step reveal">
+            <div class="step__dot"></div>
+            <span class="step__number" aria-hidden="true">01</span>
+            <h3 class="step__title">Agendamento</h3>
+            <p class="step__text">Escolha a data e horário diretamente aqui na página, sem intermediários.</p>
+          </div>
+          <div class="step reveal">
+            <div class="step__dot"></div>
+            <span class="step__number" aria-hidden="true">02</span>
+            <h3 class="step__title">Avaliação</h3>
+            <p class="step__text">Análise postural e biomecânica completa — flexibilidade, força e histórico de lesões.</p>
+          </div>
+          <div class="step reveal">
+            <div class="step__dot"></div>
+            <span class="step__number" aria-hidden="true">03</span>
+            <h3 class="step__title">Ajustes</h3>
+            <p class="step__text">Regulagem completa: selim, guidão, taco, cleats e posicionamento dos componentes.</p>
+          </div>
+          <div class="step reveal">
+            <div class="step__dot"></div>
+            <span class="step__number" aria-hidden="true">04</span>
+            <h3 class="step__title">Relatório</h3>
+            <p class="step__text">PDF com todas as medidas, fotos e recomendações para continuar evoluindo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DEPOIMENTOS
+         ============================================================ -->
+    <section class="section testimonials section--alt" id="depoimentos" aria-labelledby="depoimentos-title">
+      <div class="container">
+        <span class="section__label">Prova social</span>
+        <h2 class="section__title" id="depoimentos-title">O que dizem<br />nossos clientes</h2>
+
+        <div class="testimonials__carousel" role="region" aria-label="Carrossel de depoimentos">
+          <div class="testimonials__track" id="testimonials-track">
+            <!-- Depoimentos injetados via JS -->
+            <div class="testimonial-card" style="opacity:0.4">
+              <div class="testimonial-card__stars" aria-label="5 estrelas">★★★★★</div>
+              <p class="testimonial-card__text">Carregando depoimentos...</p>
+              <div class="testimonial-card__author">
+                <div class="testimonial-card__avatar" aria-hidden="true">?</div>
+                <div>
+                  <div class="testimonial-card__name">—</div>
+                  <div class="testimonial-card__modality">—</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonials__controls" aria-label="Controles do carrossel">
+          <button class="testimonials__btn" id="prev-btn" aria-label="Depoimento anterior">&#8592;</button>
+          <div class="testimonials__dots" id="carousel-dots" role="tablist" aria-label="Indicadores do carrossel"></div>
+          <button class="testimonials__btn" id="next-btn" aria-label="Próximo depoimento">&#8594;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         AGENDAMENTO
+         ============================================================ -->
+    <section class="section booking" id="agendamento" aria-labelledby="agendamento-title">
+      <div class="container">
+        <div class="booking__header">
+          <span class="section__label">Agende sua sessão</span>
+          <h2 class="booking__info-title" id="agendamento-title">
+            Pronto para pedalar<br />na posição <em>certa?</em>
+          </h2>
+          <p class="booking__info-text">
+            Escolha a data e horário disponíveis e confirme seu agendamento diretamente abaixo.
+          </p>
+        </div>
+
+        <div class="booking__cta-block">
+          <div class="booking__cta-benefits">
+            <div class="booking__benefit">
+              <div class="booking__benefit-icon" aria-hidden="true">✓</div>
+              Análise biomecânica completa
+            </div>
+            <div class="booking__benefit">
+              <div class="booking__benefit-icon" aria-hidden="true">✓</div>
+              Relatório em PDF com todas as medidas
+            </div>
+            <div class="booking__benefit">
+              <div class="booking__benefit-icon" aria-hidden="true">✓</div>
+              Atendimento 100% presencial e personalizado
+            </div>
+            <div class="booking__benefit">
+              <div class="booking__benefit-icon" aria-hidden="true">✓</div>
+              Válido para qualquer tipo de bicicleta
+            </div>
+          </div>
+
+          <a
+            href="https://ranieldybikefit.simplesagenda.com.br"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="booking__cta-btn"
+            aria-label="Abrir sistema de agendamento em nova aba"
+          >
+            <i data-lucide="calendar-check" aria-hidden="true"></i>
+            <span>Agendar minha sessão</span>
+            <i data-lucide="arrow-up-right" aria-hidden="true" class="booking__cta-arrow"></i>
+          </a>
+
+          <p class="booking__cta-note">
+            Você será direcionado para nossa agenda online. Rápido e sem cadastro obrigatório.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FAQ
+         ============================================================ -->
+    <section class="section section--alt" id="faq" aria-labelledby="faq-title">
+      <div class="container">
+        <span class="section__label">Dúvidas frequentes</span>
+        <h2 class="section__title" style="text-align:center" id="faq-title">Perguntas<br />Frequentes</h2>
+        <p class="section__subtitle" style="margin-inline:auto;text-align:center">
+          Encontre as respostas para as dúvidas mais comuns sobre o BikeFit.
+        </p>
+
+        <div class="faq__list" id="faq-list" role="list">
+          <!-- FAQ injetado via JS -->
+          <div style="text-align:center;color:var(--color-text-muted);padding:40px">
+            Carregando perguntas...
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <img src="assets/logo.png" alt="BikeFit" class="brand-logo brand-logo--footer" width="140" height="26" decoding="async" />
+          <p class="footer__brand-text" id="footer-brand-text">
+            BikeFit profissional e presencial. Pedale mais. Doa menos. Renda mais.
+          </p>
+          <div class="footer__socials" id="footer-socials">
+            <!-- Injetado via JS -->
+          </div>
+        </div>
+
+        <div>
+          <h3 class="footer__col-title">Navegação</h3>
+          <ul class="footer__links">
+            <li><a href="#servico">Serviço</a></li>
+            <li><a href="#como-funciona">Como Funciona</a></li>
+            <li><a href="#depoimentos">Depoimentos</a></li>
+            <li><a href="#agendamento">Agendar</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="footer__col-title">Contato</h3>
+          <div id="footer-contact">
+            <!-- Injetado via JS -->
+          </div>
+        </div>
+
+        <div>
+          <h3 class="footer__col-title">Parceiro</h3>
+          <a
+            href="https://marcelorocha.com"
+            class="footer__partner-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Marcelo Rocha — assessoria esportiva e bikefit — abre em nova aba"
+          >
+            <img
+              src="assets/marcelo-rocha.png"
+              alt="Marcelo Rocha — assessoria esportiva e bikefit"
+              class="footer__partner-logo"
+              width="112"
+              height="112"
+              decoding="async"
+            />
+          </a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copy" id="footer-copy">
+          &copy; <span id="year"></span> BikeFit. Todos os direitos reservados.
+        </p>
+        <div class="footer__bottom-meta">
+          <div class="footer__credits">
+            <span class="footer__credits-label">Desenvolvido por:</span>
+            <a href="https://dahe.com.br" class="footer__credits-link" target="_blank" rel="noopener noreferrer" aria-label="Dahe — abre em nova aba">
+              <img src="assets/dahe-logo.png" alt="Dahe" class="footer__dahe-logo" width="120" height="28" decoding="async" />
+            </a>
+          </div>
+          <a href="/admin" class="footer__admin-link" aria-label="Área administrativa">Admin</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp FAB -->
+  <a id="whatsapp-fab" class="whatsapp-fab" href="#" target="_blank" rel="noopener noreferrer" aria-label="Conversar no WhatsApp">
+    <!-- WhatsApp SVG icon -->
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+  </a>
+
+  <!-- Scripts -->
+  <script type="module" src="main.js"></script>
+
+  <script>
+    // Inicializa ícones Lucide
+    lucide.createIcons();
+  </script>
+</body>
+</html>
