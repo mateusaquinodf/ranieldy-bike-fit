@@ -6,6 +6,8 @@
   <title>Painel Admin — BikeFit</title>
   <meta name="robots" content="noindex, nofollow" />
 
+  <link rel="icon" href="assets/favicon.ico" sizes="any" type="image/x-icon" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Syne:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet" />
@@ -211,6 +213,10 @@
             <form id="faq-form">
               <input type="hidden" id="faq-id" />
               <div class="form__group">
+                <label class="form__label" for="faq-category">Categoria</label>
+                <input id="faq-category" class="form__input" type="text" placeholder="Ex.: SOBRE O SERVIÇO" />
+              </div>
+              <div class="form__group">
                 <label class="form__label" for="faq-question">Pergunta *</label>
                 <input id="faq-question" class="form__input" type="text" required />
               </div>
@@ -229,13 +235,14 @@
             <table class="admin-table" aria-label="Lista de perguntas FAQ">
               <thead>
                 <tr>
+                  <th>Categoria</th>
                   <th>Pergunta</th>
                   <th>Status</th>
                   <th>Ações</th>
                 </tr>
               </thead>
               <tbody id="faq-tbody">
-                <tr><td colspan="3" style="text-align:center;padding:32px;color:var(--admin-text-muted)">Carregando...</td></tr>
+                <tr><td colspan="4" style="text-align:center;padding:32px;color:var(--admin-text-muted)">Carregando...</td></tr>
               </tbody>
             </table>
           </div>

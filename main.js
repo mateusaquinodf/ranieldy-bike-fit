@@ -33,9 +33,9 @@ async function trackEvent(eventName, eventMeta = {}) {
 // ============================================================
 const MOCK = {
   content: {
-    hero_headline:    'Seu corpo merece<br /><em>a posição certa.</em>',
-    hero_subheadline: 'BikeFit profissional e presencial para ciclistas que querem pedalar mais, com menos dor e mais performance.',
-    hero_badge:       '✓ Atendimento Presencial · São Paulo, SP',
+    hero_headline:    'Pedale com mais conforto,<br /><em>menos dor e muito mais performance.</em>',
+    hero_subheadline: 'O Bike Fit certo transforma sua experiência na bicicleta. Com tecnologia de ponta e formação EBBT, Ranieldy Mendes ajusta sua bike ao seu corpo — para você pedalar do jeito que sempre quis, em Brasília.',
+    hero_badge:       '✓ Atendimento Presencial em Brasília · Todos os níveis',
   },
 
   settings: {
@@ -102,14 +102,19 @@ const MOCK = {
   ],
 
   faq: [
-    { id: 'fq-1', question: 'O que é BikeFit e por que preciso fazer?',          answer: 'BikeFit é a análise e ajuste biomecânico da posição do ciclista na bicicleta. Uma posição correta evita lesões, aumenta o conforto e melhora a performance — independente do nível ou modalidade.', order: 1, active: true },
-    { id: 'fq-2', question: 'Quanto tempo dura a sessão?',                        answer: 'Uma sessão completa dura em média 2 a 3 horas. O tempo varia conforme a complexidade dos ajustes e o tipo de avaliação (básica ou avançada).', order: 2, active: true },
-    { id: 'fq-3', question: 'Preciso levar minha bicicleta?',                     answer: 'Sim! Traga sua bicicleta, capacete, sapatilha (se usar), kit de ciclismo e qualquer palmilha ortopédica. Quanto mais completo o setup, mais precisos os ajustes.', order: 3, active: true },
-    { id: 'fq-4', question: 'O BikeFit serve para qualquer tipo de bicicleta?',   answer: 'Sim. Atendemos ciclistas de estrada, MTB, triathlon/TT e ciclismo urbano. Cada modalidade tem suas especificidades e o ajuste é feito de forma personalizada.', order: 4, active: true },
-    { id: 'fq-5', question: 'Qual a diferença entre BikeFit básico e avançado?',  answer: 'O básico cobre ajustes de altura e recuo de selim, alcance e posição dos pedivelas. O avançado inclui análise de movimento em vídeo, análise de força, ajuste de cleats e relatório completo em PDF.', order: 5, active: true },
-    { id: 'fq-6', question: 'Vou receber algum documento após a sessão?',         answer: 'Sim! Você recebe um relatório completo em PDF com todas as medidas ajustadas, fotos da posição final e recomendações personalizadas para continuar evoluindo.', order: 6, active: true },
-    { id: 'fq-7', question: 'Com que frequência devo refazer o BikeFit?',         answer: 'Recomenda-se revisar a posição anualmente ou sempre que houver mudança significativa: novo equipamento, lesão, perda ou ganho de peso, ou mudança de objetivo.', order: 7, active: true },
-    { id: 'fq-8', question: 'Como me preparar para a sessão?',                    answer: 'Chegue descansado, com equipamento completo e, se possível, com fotos ou vídeos de pedais recentes. Evite treinos extenuantes no dia anterior.', order: 8, active: true },
+    { category: 'SOBRE O SERVIÇO', question: 'O que é o Bike Fit e pra que serve?', answer: 'O Bike Fit é o ajuste preciso da sua bicicleta ao seu corpo. Através de análise de movimento, medidas antropométricas e testes funcionais, a bike é regulada de acordo com a sua anatomia e objetivo — para você pedalar com mais conforto, desempenho e sem dores.', order: 1, active: true },
+    { category: 'SOBRE O SERVIÇO', question: 'Quanto tempo dura a sessão?', answer: 'A sessão tem duração de até 3 horas. Esse tempo inclui a entrevista sobre seu histórico e objetivos, os testes de flexibilidade e função muscular, a análise tridimensional da pedalada com sensores, os ajustes na bike e a entrega do laudo completo com resultado final e imagens.', order: 2, active: true },
+    { category: 'SOBRE O SERVIÇO', question: 'O que está incluído no Bike Fit?', answer: 'A sessão completa inclui:\n\n• Entrevista sobre histórico, queixas e objetivos do ciclista\n• Medidas antropométricas\n• Testes de flexibilidade e função muscular\n• Análise tridimensional da pedalada com sensores em pontos anatômicos\n• Ajustes completos na bicicleta\n• Laudo completo com resultado final e imagens', order: 3, active: true },
+    { category: 'SOBRE O SERVIÇO', question: 'Qual tecnologia é usada na análise?', answer: 'Utilizamos dois softwares profissionais de referência no mercado de bike fitting: LEOMO e VELOGIC STUDIO.\n\nO LEOMO é um sistema de captação de movimento com sensores afixados em pontos anatômicos do ciclista, que avalia em tempo real a dinâmica da pedalada — identificando assimetrias, ângulos articulares e padrões de movimento.\n\nO VELOGIC STUDIO complementa a análise com ferramentas de posicionamento e modelagem tridimensional, garantindo ajustes ainda mais precisos e personalizados ao seu corpo e objetivo.\n\nEssa combinação de tecnologias é o que diferencia um Bike Fit profissional de um simples ajuste de bike.', order: 4, active: true },
+    { category: 'PARA QUEM É', question: 'O Bike Fit é só para ciclistas avançados ou competidores?', answer: 'Não. O atendimento é para todos os níveis — do iniciante que acabou de comprar a primeira bike ao atleta que compete em alto nível. O Bike Fit é especialmente recomendado para quem sente dor ao pedalar, quer melhorar a performance ou acabou de adquirir uma bicicleta nova.', order: 5, active: true },
+    { category: 'PARA QUEM É', question: 'Funciona para qual tipo de bicicleta?', answer: 'O serviço atende bicicletas de estrada (speed), mountain bike (MTB), bicicletas de triathlon e cicloturismo. Em caso de dúvida sobre o seu tipo de bike, entre em contato antes de agendar.', order: 6, active: true },
+    { category: 'PARA QUEM É', question: 'Tenho dor ao pedalar. O Bike Fit resolve?', answer: 'Dores no joelho, lombar, pescoço e desconforto no selim são frequentemente causadas por uma bike desajustada ao corpo. O Bike Fit identifica essas causas e corrige os ajustes. Em caso de dores com origem clínica, o profissional pode indicar acompanhamento médico complementar.', order: 7, active: true },
+    { category: 'VALORES E PAGAMENTO', question: 'Quanto custa o Bike Fit?', answer: '• Sessão completa para novos clientes: R$ 400,00\n• Cliente antigo com bicicleta nova: R$ 300,00\n• Troca de componente, ajustes ou retorno: R$ 150,00\n• Ajuste de tacos: a partir de R$ 30,00\n• Segunda bicicleta na mesma sessão: 50% de desconto\n• Outros serviços: valor a combinar', order: 8, active: true },
+    { category: 'VALORES E PAGAMENTO', question: 'Quais são as formas de pagamento?', answer: 'O pagamento é aceito via Pix e dinheiro.', order: 9, active: true },
+    { category: 'ANTES DE VIR — PREPARO E POLÍTICA', question: 'O que preciso levar para a sessão?', answer: 'Traga sua bicicleta, vestimenta adequada para pedalar (bermuda, camisa e sapatilha de ciclismo, se tiver) e, se usar, seus próprios pedais e tacos. Venha preparado como se fosse pedalar normalmente.', order: 10, active: true },
+    { category: 'ANTES DE VIR — PREPARO E POLÍTICA', question: 'Minha bike precisa estar em boas condições?', answer: 'Sim. A bike deve estar limpa e em bom estado de funcionamento. Caso o serviço não possa ser realizado por conta de equipamentos inadequados, mau estado da bicicleta ou falta de vestimenta adequada, a sessão será cobrada normalmente e o serviço reagendado para outra data.', order: 11, active: true },
+    { category: 'ANTES DE VIR — PREPARO E POLÍTICA', question: 'Onde o atendimento é realizado?', answer: 'O atendimento é presencial em Brasília — DF. O endereço exato é confirmado no momento do agendamento.', order: 12, active: true },
+    { category: 'ANTES DE VIR — PREPARO E POLÍTICA', question: 'Como faço para agendar?', answer: 'É só clicar no botão de agendamento na landing page ou entrar em contato diretamente com o Ranieldy pelo WhatsApp. As vagas são limitadas por semana, então é recomendado garantir a sua com antecedência.', order: 13, active: true },
   ],
 
   // Gera slots realistas para as próximas semanas
@@ -138,10 +143,39 @@ const MOCK = {
 };
 
 // ============================================================
+// BARRA DE PROGRESSO DE LEITURA (SCROLL)
+// ============================================================
+function initReadProgress() {
+  const fill = document.getElementById('read-progress-fill');
+  if (!fill) return;
+
+  let ticking = false;
+
+  function update() {
+    const root = document.documentElement;
+    const maxScroll = Math.max(0, root.scrollHeight - root.clientHeight);
+    const ratio = maxScroll <= 0 ? 1 : Math.min(1, Math.max(0, window.scrollY / maxScroll));
+    fill.style.transform = `scaleX(${ratio})`;
+    ticking = false;
+  }
+
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate, { passive: true });
+  update();
+}
+
+// ============================================================
 // INICIALIZAÇÃO
 // ============================================================
 document.addEventListener('DOMContentLoaded', async () => {
   trackEvent('page_view');
+  initReadProgress();
   initCursor();
   initNavbar();
   initScrollReveal();
@@ -157,7 +191,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadTestimonials(),
     loadFAQ(),
     loadSettings(),
+    loadAvailableSlots(),
   ]);
+
+  window.dispatchEvent(new Event('resize'));
 
   // Atualiza ícones Lucide após injeção de HTML dinâmico
   if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -714,6 +751,47 @@ async function loadTestimonials() {
   renderCarousel(data?.length ? data : MOCK.testimonials);
 }
 
+function renderFaqListMarkup(items) {
+  const sorted = [...items].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  let html = '';
+  let i = 0;
+  let groupOpen = false;
+
+  const closeGroup = () => {
+    if (groupOpen) {
+      html += '</div>';
+      groupOpen = false;
+    }
+  };
+
+  sorted.forEach((item, pos) => {
+    const cat = (item.category ?? '').trim();
+    const prevCat = pos > 0 ? (sorted[pos - 1].category ?? '').trim() : null;
+
+    if (cat !== prevCat) {
+      closeGroup();
+      html += '<div class="faq__group">';
+      groupOpen = true;
+      if (cat) html += `<h3 class="faq__group-title">${escapeHtml(cat)}</h3>`;
+    }
+
+    const n = i++;
+    html += `
+    <div class="faq-item reveal">
+      <button type="button" class="faq-item__trigger" aria-expanded="false" aria-controls="faq-body-${n}" id="faq-trigger-${n}">
+        <span>${escapeHtml(item.question)}</span>
+        <span class="faq-item__icon" aria-hidden="true">+</span>
+      </button>
+      <div class="faq-item__body" id="faq-body-${n}" role="region" aria-labelledby="faq-trigger-${n}">
+        <p class="faq-item__answer">${escapeHtml(item.answer)}</p>
+      </div>
+    </div>`;
+  });
+
+  closeGroup();
+  return html;
+}
+
 async function loadFAQ() {
   const { data } = await sb
     .from('bfr_faq')
@@ -727,21 +805,9 @@ async function loadFAQ() {
   const list = document.getElementById('faq-list');
   if (!list) return;
 
-  list.innerHTML = items.map((item, i) => `
-    <div class="faq-item reveal" role="listitem">
-      <button class="faq-item__trigger" aria-expanded="false" aria-controls="faq-body-${i}" id="faq-trigger-${i}">
-        <span>${escapeHtml(item.question)}</span>
-        <span class="faq-item__icon" aria-hidden="true">+</span>
-      </button>
-      <div class="faq-item__body" id="faq-body-${i}" role="region" aria-labelledby="faq-trigger-${i}">
-        <p class="faq-item__answer">${escapeHtml(item.answer)}</p>
-      </div>
-    </div>
-  `).join('');
+  list.innerHTML = renderFaqListMarkup(items);
 
-  // Dispara scroll reveal para os novos elementos
   initScrollReveal();
-  await loadAvailableSlots();
 }
 
 async function loadSettings() {

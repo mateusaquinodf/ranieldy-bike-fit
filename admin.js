@@ -454,13 +454,14 @@ async function loadFAQ() {
 function renderFAQ(list) {
   const tbody = document.getElementById('faq-tbody');
   if (!list.length) {
-    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:32px;color:var(--color-text-muted)">Nenhuma pergunta cadastrada.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--admin-text-muted)">Nenhuma pergunta cadastrada.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = list.map(f => `
     <tr>
-      <td style="max-width:400px">${esc(f.question)}</td>
+      <td style="max-width:200px">${esc(f.category || '—')}</td>
+      <td style="max-width:360px">${esc(f.question)}</td>
       <td><span class="badge ${f.active ? 'badge--active' : 'badge--inactive'}">${f.active ? 'Ativo' : 'Inativo'}</span></td>
       <td>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -481,6 +482,7 @@ function initFAQForm() {
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const payload = {
+      category: document.getElementById('faq-category').value.trim(),
       question: document.getElementById('faq-question').value.trim(),
       answer:   document.getElementById('faq-answer').value.trim(),
     };
@@ -520,6 +522,7 @@ window.editFaq = async function (id) {
   if (error || !data) { showToast('Erro ao carregar pergunta.', 'error'); return; }
 
   editingFaqId = id;
+  document.getElementById('faq-category').value = data.category || '';
   document.getElementById('faq-question').value = data.question;
   document.getElementById('faq-answer').value   = data.answer;
   document.getElementById('faq-form-title').textContent = 'Editar Pergunta';
