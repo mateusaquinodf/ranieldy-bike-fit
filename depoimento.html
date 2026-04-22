@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enviar Depoimento — BikeFit</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Syne:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dep-page">
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Background decoration: concentric bike-wheel rings -->
+  <div class="dep-bg-wheel" aria-hidden="true">
+    <svg viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="350" cy="350" r="320" stroke="rgba(245,197,24,0.07)" stroke-width="1"/>
+      <circle cx="350" cy="350" r="260" stroke="rgba(245,197,24,0.055)" stroke-width="1"/>
+      <circle cx="350" cy="350" r="200" stroke="rgba(245,197,24,0.045)" stroke-width="1"/>
+      <circle cx="350" cy="350" r="140" stroke="rgba(245,197,24,0.04)" stroke-width="1"/>
+      <circle cx="350" cy="350" r="80"  stroke="rgba(245,197,24,0.035)" stroke-width="1"/>
+      <!-- Spokes -->
+      <line x1="350" y1="30"  x2="350" y2="670" stroke="rgba(245,197,24,0.03)" stroke-width="1"/>
+      <line x1="30"  y1="350" x2="670" y2="350" stroke="rgba(245,197,24,0.03)" stroke-width="1"/>
+      <line x1="124" y1="124" x2="576" y2="576" stroke="rgba(245,197,24,0.025)" stroke-width="1"/>
+      <line x1="576" y1="124" x2="124" y2="576" stroke="rgba(245,197,24,0.025)" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <!-- Header -->
+  <header class="dep-header">
+    <a href="/" class="dep-logo-link" aria-label="Voltar à página inicial">
+      <img src="assets/logo.png" alt="BikeFit" class="dep-logo-img" />
+    </a>
+    <a href="/" class="dep-back-link">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+        <path d="M19 12H5M5 12l7-7M5 12l7 7"/>
+      </svg>
+      Voltar ao site
+    </a>
+  </header>
+
+  <!-- Main -->
+  <main class="dep-main" id="dep-main">
+
+    <!-- Form Card -->
+    <div class="dep-card" id="dep-card">
+
+      <!-- Progress bar -->
+      <div class="dep-prog" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-label="Progresso do formulário">
+        <div class="dep-prog__track">
+          <div class="dep-prog__fill" id="dep-fill"></div>
+        </div>
+        <div class="dep-prog__meta">
+          <span class="dep-prog__label" id="dep-step-label">Passo 1 de 4</span>
+          <span class="dep-prog__hint">Menos de 1 minuto</span>
+        </div>
+      </div>
+
+      <!-- Ghost step number (decorative) -->
+      <div class="dep-ghost" id="dep-ghost" aria-hidden="true">1</div>
+
+      <!-- Multi-step form -->
+      <form id="testimonial-public-form" class="dep-form" novalidate>
+
+        <!-- Step 1: Nome -->
+        <div class="dep-step active" data-step="1">
+          <span class="dep-step__badge">01 — Nome</span>
+          <h2 class="dep-step__q">Qual é o<br/>seu nome?</h2>
+          <div class="dep-field">
+            <input
+              id="tp-name"
+              class="dep-input"
+              type="text"
+              placeholder="Nome completo"
+              autocomplete="given-name"
+              required
+            />
+            <div class="dep-field__line"></div>
+          </div>
+        </div>
+
+        <!-- Step 2: Bicicleta -->
+        <div class="dep-step" data-step="2">
+          <span class="dep-step__badge">02 — Bicicleta</span>
+          <h2 class="dep-step__q">Qual é a<br/>sua bike?</h2>
+          <div class="dep-field">
+            <input
+              id="tp-bike"
+              class="dep-input"
+              type="text"
+              placeholder="Marca e modelo (ex: Trek Domane SL5)"
+              required
+            />
+            <div class="dep-field__line"></div>
+          </div>
+        </div>
+
+        <!-- Step 3: Nota -->
+        <div class="dep-step" data-step="3">
+          <span class="dep-step__badge">03 — Avaliação</span>
+          <h2 class="dep-step__q">Como você<br/>avalia?</h2>
+          <div class="dep-stars-wrap">
+            <div class="dep-stars" role="radiogroup" aria-label="Avaliação de 1 a 5 estrelas">
+              <input type="radio" name="tp-rating" id="tp-star5" value="5" checked />
+              <label for="tp-star5" aria-label="5 estrelas">★</label>
+              <input type="radio" name="tp-rating" id="tp-star4" value="4" />
+              <label for="tp-star4" aria-label="4 estrelas">★</label>
+              <input type="radio" name="tp-rating" id="tp-star3" value="3" />
+              <label for="tp-star3" aria-label="3 estrelas">★</label>
+              <input type="radio" name="tp-rating" id="tp-star2" value="2" />
+              <label for="tp-star2" aria-label="2 estrelas">★</label>
+              <input type="radio" name="tp-rating" id="tp-star1" value="1" />
+              <label for="tp-star1" aria-label="1 estrela">★</label>
+            </div>
+            <p class="dep-stars__hint" id="dep-stars-hint" aria-live="polite">Excelente</p>
+          </div>
+        </div>
+
+        <!-- Step 4: Feedback -->
+        <div class="dep-step" data-step="4">
+          <span class="dep-step__badge">04 — Depoimento</span>
+          <h2 class="dep-step__q">Conte sua<br/>experiência</h2>
+          <div class="dep-field">
+            <textarea
+              id="tp-feedback"
+              class="dep-input dep-textarea"
+              placeholder="Como foi o BikeFit? Sentiu diferença no conforto e performance?"
+              required
+            ></textarea>
+            <div class="dep-field__line"></div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="dep-actions">
+          <button
+            type="button"
+            class="dep-btn dep-btn--back"
+            id="tp-back"
+            style="display:none"
+            aria-label="Voltar ao passo anterior"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+              <path d="M19 12H5M5 12l7-7M5 12l7 7"/>
+            </svg>
+            Voltar
+          </button>
+
+          <button type="button" class="dep-btn dep-btn--next" id="tp-next">
+            Continuar
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+
+          <button type="submit" class="dep-btn dep-btn--submit" id="tp-submit" style="display:none">
+            Enviar depoimento
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+
+        <span id="tp-message" class="dep-msg" role="status" aria-live="polite"></span>
+
+      </form>
+    </div>
+
+    <!-- Success Card -->
+    <div class="dep-success" id="dep-success" hidden>
+      <div class="dep-success__ring" aria-hidden="true"></div>
+      <div class="dep-success__check" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <p class="dep-success__eyebrow">Depoimento recebido</p>
+      <h2 class="dep-success__title">Muito<br/>obrigado!</h2>
+      <p class="dep-success__body">Seu relato está em análise e, após aprovação, ficará visível no site — inspirando outros ciclistas a darem o próximo passo.</p>
+      <a href="/" class="dep-btn dep-btn--submit">
+        Voltar ao site
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+  </main>
+
+  <script type="module" src="depoimento.js"></script>
+</body>
+</html>

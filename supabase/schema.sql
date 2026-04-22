@@ -7,6 +7,10 @@
 -- Habilita a extensão para UUIDs
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
+-- Remoção definitiva do módulo de agendamento
+DROP TABLE IF EXISTS public.bfr_bookings CASCADE;
+DROP TABLE IF EXISTS public.bfr_availability_slots CASCADE;
+
 -- ============================================================
 -- TABELAS
 -- ============================================================
@@ -32,6 +36,17 @@ CREATE TABLE IF NOT EXISTS bfr_testimonials (
   created_at  TIMESTAMPTZ DEFAULT NOW()
 );
 
+ALTER TABLE bfr_testimonials ADD COLUMN IF NOT EXISTS bike_model   TEXT;
+ALTER TABLE bfr_testimonials ADD COLUMN IF NOT EXISTS approved     BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE bfr_testimonials ADD COLUMN IF NOT EXISTS submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+ALTER TABLE bfr_testimonials ADD COLUMN IF NOT EXISTS source       TEXT NOT NULL DEFAULT 'admin';
+
+-- Mantém depoimentos existentes visíveis após migração
+UPDATE bfr_testimonials
+SET approved = TRUE
+WHERE approved IS DISTINCT FROM TRUE
+  AND source = 'admin';
+
 -- FAQ
 CREATE TABLE IF NOT EXISTS bfr_faq (
   id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -48,29 +63,22 @@ CREATE TABLE IF NOT EXISTS bfr_settings (
   value       TEXT NOT NULL DEFAULT ''
 );
 
--- Slots de disponibilidade
-CREATE TABLE IF NOT EXISTS bfr_availability_slots (
-  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  date         DATE NOT NULL,
-  time         TIME NOT NULL,
-  max_bookings INT NOT NULL DEFAULT 1,
-  active       BOOLEAN NOT NULL DEFAULT TRUE,
-  UNIQUE (date, time)
+-- Eventos de analytics da LP
+CREATE TABLE IF NOT EXISTS bfr_analytics_events (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_name  TEXT NOT NULL,
+  page        TEXT NOT NULL DEFAULT 'landing',
+  session_id  TEXT,
+  event_meta  JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Agendamentos
-CREATE TABLE IF NOT EXISTS bfr_bookings (
-  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name        TEXT NOT NULL,
-  email       TEXT NOT NULL,
-  phone       TEXT NOT NULL,
-  modality    TEXT NOT NULL,
-  date        DATE NOT NULL,
-  time        TIME NOT NULL,
-  notes       TEXT,
-  status      TEXT NOT NULL DEFAULT 'pendente' CHECK (status IN ('pendente', 'confirmado', 'cancelado')),
-  created_at  TIMESTAMPTZ DEFAULT NOW()
-);
+CREATE INDEX IF NOT EXISTS idx_bfr_analytics_events_name_created
+  ON bfr_analytics_events (event_name, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_bfr_analytics_events_created_at
+  ON bfr_analytics_events (created_at DESC);
+
 
 -- ============================================================
 -- DADOS INICIAIS
@@ -94,57 +102,13 @@ INSERT INTO bfr_settings (key, value) VALUES
   ('city',       'São Paulo')
 ON CONFLICT (key) DO NOTHING;
 
-INSERT INTO bfr_testimonials (name, modality, text, rating, photo_url, active, "order") VALUES
-  ('Carlos M.',    'Ciclismo de Estrada', 'Após o BikeFit resolvi a dor no joelho que me perseguia há meses. Minha posição ficou muito mais eficiente e agora pedalo com prazer novamente.',                      5, 'https://i.pravatar.cc/150?img=11', TRUE, 1),
-  ('Ana Paula R.', 'Triathlon',           'Profissional incrível! Ajustou minha posição para as três modalidades e meu tempo no ciclismo melhorou significativamente na próxima prova.',                           5, 'https://i.pravatar.cc/150?img=47', TRUE, 2),
-  ('Diego S.',     'MTB',                 'Valia cada centavo. Saí da sessão com a bike completamente regulada e um relatório detalhado de todas as medidas. Super recomendo!',                                     5, 'https://i.pravatar.cc/150?img=32', TRUE, 3),
-  ('Fernanda L.',  'Ciclismo Urbano',     'Comecei a usar a bike para trabalhar e estava com dores nas costas toda semana. Depois do BikeFit, zero desconforto. Simplesmente incrível.',                           5, 'https://i.pravatar.cc/150?img=44', TRUE, 4),
-  ('Rodrigo T.',   'Ciclismo de Estrada', 'Ganhei mais de 15W no FTP só com o ajuste de posição. O Ranieldy é extremamente técnico e atencioso. Voltarei para revisão anual com certeza.',                        5, 'https://i.pravatar.cc/150?img=68', TRUE, 5)
+INSERT INTO bfr_testimonials (name, modality, bike_model, text, rating, photo_url, active, approved, source, "order") VALUES
+  ('Carlos M.',    'Ciclismo de Estrada', 'Specialized Tarmac SL7', 'Após o BikeFit resolvi a dor no joelho que me perseguia há meses. Minha posição ficou muito mais eficiente e agora pedalo com prazer novamente.',                      5, 'https://i.pravatar.cc/150?img=11', TRUE, TRUE, 'admin', 1),
+  ('Ana Paula R.', 'Triathlon',           'Cervelo P-Series',       'Profissional incrível! Ajustou minha posição para as três modalidades e meu tempo no ciclismo melhorou significativamente na próxima prova.',                           5, 'https://i.pravatar.cc/150?img=47', TRUE, TRUE, 'admin', 2),
+  ('Diego S.',     'MTB',                 'Trek Supercaliber',      'Valia cada centavo. Saí da sessão com a bike completamente regulada e um relatório detalhado de todas as medidas. Super recomendo!',                                     5, 'https://i.pravatar.cc/150?img=32', TRUE, TRUE, 'admin', 3),
+  ('Fernanda L.',  'Ciclismo Urbano',     'Caloi City Tour',        'Comecei a usar a bike para trabalhar e estava com dores nas costas toda semana. Depois do BikeFit, zero desconforto. Simplesmente incrível.',                           5, 'https://i.pravatar.cc/150?img=44', TRUE, TRUE, 'admin', 4),
+  ('Rodrigo T.',   'Ciclismo de Estrada', 'Cannondale CAAD13',      'Ganhei mais de 15W no FTP só com o ajuste de posição. O Ranieldy é extremamente técnico e atencioso. Voltarei para revisão anual com certeza.',                        5, 'https://i.pravatar.cc/150?img=68', TRUE, TRUE, 'admin', 5)
 ON CONFLICT DO NOTHING;
-
--- ============================================================
--- SLOTS DE DISPONIBILIDADE — Abril / Maio 2026
--- ============================================================
--- Segunda-feira: 09:00 e 14:00
--- Terça-feira:   09:00 e 16:30
--- Quarta-feira:  09:00, 11:00 e 14:00
--- Quinta-feira:  14:00 e 16:30
--- Sexta-feira:   09:00 e 14:00
--- Sábado:        09:00 e 11:00
-
-INSERT INTO bfr_availability_slots (date, time, max_bookings, active) VALUES
-  -- Semana 14/04
-  ('2026-04-14','09:00',1,TRUE), ('2026-04-14','14:00',1,TRUE),
-  ('2026-04-15','09:00',1,TRUE), ('2026-04-15','16:30',1,TRUE),
-  ('2026-04-16','09:00',1,TRUE), ('2026-04-16','11:00',1,TRUE), ('2026-04-16','14:00',1,TRUE),
-  ('2026-04-17','14:00',1,TRUE), ('2026-04-17','16:30',1,TRUE),
-  ('2026-04-18','09:00',1,TRUE), ('2026-04-18','14:00',1,TRUE),
-  -- Semana 20/04
-  ('2026-04-21','09:00',1,TRUE), ('2026-04-21','14:00',1,TRUE),
-  ('2026-04-22','09:00',1,TRUE), ('2026-04-22','16:30',1,TRUE),
-  ('2026-04-23','09:00',1,TRUE), ('2026-04-23','11:00',1,TRUE), ('2026-04-23','14:00',1,TRUE),
-  ('2026-04-24','14:00',1,TRUE), ('2026-04-24','16:30',1,TRUE),
-  ('2026-04-25','09:00',1,TRUE), ('2026-04-25','14:00',1,TRUE),
-  ('2026-04-26','09:00',1,TRUE), ('2026-04-26','11:00',1,TRUE),
-  -- Semana 27/04
-  ('2026-04-28','09:00',1,TRUE), ('2026-04-28','14:00',1,TRUE),
-  ('2026-04-29','09:00',1,TRUE), ('2026-04-29','16:30',1,TRUE),
-  ('2026-04-30','09:00',1,TRUE), ('2026-04-30','11:00',1,TRUE), ('2026-04-30','14:00',1,TRUE),
-  -- Semana 04/05
-  ('2026-05-04','09:00',1,TRUE), ('2026-05-04','14:00',1,TRUE),
-  ('2026-05-05','09:00',1,TRUE), ('2026-05-05','16:30',1,TRUE),
-  ('2026-05-06','09:00',1,TRUE), ('2026-05-06','11:00',1,TRUE), ('2026-05-06','14:00',1,TRUE),
-  ('2026-05-07','14:00',1,TRUE), ('2026-05-07','16:30',1,TRUE),
-  ('2026-05-08','09:00',1,TRUE), ('2026-05-08','14:00',1,TRUE),
-  ('2026-05-09','09:00',1,TRUE), ('2026-05-09','11:00',1,TRUE),
-  -- Semana 11/05
-  ('2026-05-11','09:00',1,TRUE), ('2026-05-11','14:00',1,TRUE),
-  ('2026-05-12','09:00',1,TRUE), ('2026-05-12','16:30',1,TRUE),
-  ('2026-05-13','09:00',1,TRUE), ('2026-05-13','11:00',1,TRUE), ('2026-05-13','14:00',1,TRUE),
-  ('2026-05-14','14:00',1,TRUE), ('2026-05-14','16:30',1,TRUE),
-  ('2026-05-15','09:00',1,TRUE), ('2026-05-15','14:00',1,TRUE),
-  ('2026-05-16','09:00',1,TRUE), ('2026-05-16','11:00',1,TRUE)
-ON CONFLICT (date, time) DO NOTHING;
 
 INSERT INTO bfr_faq (question, answer, "order", active) VALUES
   ('O que é BikeFit e por que preciso fazer?',         'BikeFit é a análise e ajuste biomecânico da posição do ciclista na bicicleta. Uma posição correta evita lesões, aumenta o conforto e melhora a performance — independente do seu nível ou modalidade.', 1, TRUE),
@@ -165,10 +129,11 @@ ALTER TABLE bfr_content            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bfr_testimonials       ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bfr_faq                ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bfr_settings           ENABLE ROW LEVEL SECURITY;
-ALTER TABLE bfr_availability_slots ENABLE ROW LEVEL SECURITY;
-ALTER TABLE bfr_bookings           ENABLE ROW LEVEL SECURITY;
+ALTER TABLE bfr_analytics_events   ENABLE ROW LEVEL SECURITY;
 
 -- ---------- bfr_content ----------
+DROP POLICY IF EXISTS "bfr_content_select_public" ON bfr_content;
+DROP POLICY IF EXISTS "bfr_content_all_admin" ON bfr_content;
 CREATE POLICY "bfr_content_select_public"
   ON bfr_content FOR SELECT USING (TRUE);
 
@@ -178,8 +143,20 @@ CREATE POLICY "bfr_content_all_admin"
   WITH CHECK (auth.role() = 'authenticated');
 
 -- ---------- bfr_testimonials ----------
+DROP POLICY IF EXISTS "bfr_testimonials_select_public" ON bfr_testimonials;
+DROP POLICY IF EXISTS "bfr_testimonials_insert_public" ON bfr_testimonials;
+DROP POLICY IF EXISTS "bfr_testimonials_all_admin" ON bfr_testimonials;
 CREATE POLICY "bfr_testimonials_select_public"
-  ON bfr_testimonials FOR SELECT USING (active = TRUE);
+  ON bfr_testimonials FOR SELECT USING (active = TRUE AND approved = TRUE);
+
+CREATE POLICY "bfr_testimonials_insert_public"
+  ON bfr_testimonials FOR INSERT
+  WITH CHECK (
+    source = 'public_form'
+    AND approved = FALSE
+    AND active = TRUE
+    AND rating BETWEEN 1 AND 5
+  );
 
 CREATE POLICY "bfr_testimonials_all_admin"
   ON bfr_testimonials FOR ALL
@@ -187,6 +164,8 @@ CREATE POLICY "bfr_testimonials_all_admin"
   WITH CHECK (auth.role() = 'authenticated');
 
 -- ---------- bfr_faq ----------
+DROP POLICY IF EXISTS "bfr_faq_select_public" ON bfr_faq;
+DROP POLICY IF EXISTS "bfr_faq_all_admin" ON bfr_faq;
 CREATE POLICY "bfr_faq_select_public"
   ON bfr_faq FOR SELECT USING (active = TRUE);
 
@@ -196,6 +175,8 @@ CREATE POLICY "bfr_faq_all_admin"
   WITH CHECK (auth.role() = 'authenticated');
 
 -- ---------- bfr_settings ----------
+DROP POLICY IF EXISTS "bfr_settings_select_public" ON bfr_settings;
+DROP POLICY IF EXISTS "bfr_settings_all_admin" ON bfr_settings;
 CREATE POLICY "bfr_settings_select_public"
   ON bfr_settings FOR SELECT USING (TRUE);
 
@@ -204,23 +185,19 @@ CREATE POLICY "bfr_settings_all_admin"
   USING (auth.role() = 'authenticated')
   WITH CHECK (auth.role() = 'authenticated');
 
--- ---------- bfr_availability_slots ----------
-CREATE POLICY "bfr_slots_select_public"
-  ON bfr_availability_slots FOR SELECT USING (active = TRUE);
+-- ---------- bfr_analytics_events ----------
+DROP POLICY IF EXISTS "bfr_analytics_insert_public" ON bfr_analytics_events;
+DROP POLICY IF EXISTS "bfr_analytics_select_admin" ON bfr_analytics_events;
+CREATE POLICY "bfr_analytics_insert_public"
+  ON bfr_analytics_events FOR INSERT
+  WITH CHECK (
+    event_name IN ('page_view', 'cta_booking_click', 'email_fab_click')
+    AND char_length(coalesce(page, '')) <= 64
+  );
 
-CREATE POLICY "bfr_slots_all_admin"
-  ON bfr_availability_slots FOR ALL
-  USING (auth.role() = 'authenticated')
-  WITH CHECK (auth.role() = 'authenticated');
-
--- ---------- bfr_bookings ----------
-CREATE POLICY "bfr_bookings_insert_public"
-  ON bfr_bookings FOR INSERT WITH CHECK (TRUE);
-
-CREATE POLICY "bfr_bookings_all_admin"
-  ON bfr_bookings FOR ALL
-  USING (auth.role() = 'authenticated')
-  WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "bfr_analytics_select_admin"
+  ON bfr_analytics_events FOR SELECT
+  USING (auth.role() = 'authenticated');
 
 -- ============================================================
 -- FIM DO SCHEMA

@@ -4,6 +4,30 @@
 
 import sb from './supabase.js';
 
+const ANALYTICS_SESSION_KEY = 'bikefit_analytics_session_id';
+const PAGE_NAME = 'landing';
+
+function getAnalyticsSessionId() {
+  const existing = localStorage.getItem(ANALYTICS_SESSION_KEY);
+  if (existing) return existing;
+  const created = (crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`);
+  localStorage.setItem(ANALYTICS_SESSION_KEY, created);
+  return created;
+}
+
+async function trackEvent(eventName, eventMeta = {}) {
+  try {
+    await sb.from('bfr_analytics_events').insert([{
+      event_name: eventName,
+      page: PAGE_NAME,
+      session_id: getAnalyticsSessionId(),
+      event_meta: eventMeta,
+    }]);
+  } catch (error) {
+    console.warn('Falha ao registrar evento de analytics:', error);
+  }
+}
+
 // ============================================================
 // MOCK DATA — fallback quando Supabase está vazio
 // ============================================================
@@ -117,6 +141,7 @@ const MOCK = {
 // INICIALIZAÇÃO
 // ============================================================
 document.addEventListener('DOMContentLoaded', async () => {
+  trackEvent('page_view');
   initCursor();
   initNavbar();
   initScrollReveal();
@@ -124,6 +149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initCarousel();
   initCalendar();
   initBookingForm();
+  initAnalyticsTracking();
 
   // Carrega dados dinâmicos do Supabase
   await Promise.all([
@@ -140,6 +166,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
+
+function initAnalyticsTracking() {
+  document.addEventListener('click', (e) => {
+    const emailFab = e.target.closest('#email-fab');
+    if (emailFab) {
+      trackEvent('email_fab_click');
+      return;
+    }
+
+    const bookingLink = e.target.closest('a[href="#agendamento"], a[href*="simplesagenda.com.br"]');
+    if (!bookingLink) return;
+
+    let source = 'other';
+    if (bookingLink.classList.contains('navbar__cta')) source = 'navbar';
+    else if (bookingLink.closest('.hero')) source = 'hero';
+    else if (bookingLink.classList.contains('booking__cta-btn')) source = 'booking_section';
+    else if (bookingLink.closest('.navbar__drawer')) source = 'mobile_menu';
+
+    trackEvent('cta_booking_click', { source });
+  });
+}
 
 // ============================================================
 // CURSOR CUSTOMIZADO
@@ -387,6 +434,7 @@ function renderCarousel(testimonials) {
           <div>
             <div class="testimonial-card__name">${escapeHtml(t.name)}</div>
             <div class="testimonial-card__modality">${escapeHtml(t.modality)}</div>
+            ${t.bike_model ? `<div class="testimonial-card__modality">${escapeHtml(t.bike_model)}</div>` : ''}
           </div>
         </div>
       </div>`;
@@ -660,6 +708,7 @@ async function loadTestimonials() {
     .from('bfr_testimonials')
     .select('*')
     .eq('active', true)
+    .eq('approved', true)
     .order('order', { ascending: true });
 
   renderCarousel(data?.length ? data : MOCK.testimonials);
@@ -701,11 +750,14 @@ async function loadSettings() {
     ? Object.fromEntries(data.map(r => [r.key, r.value]))
     : MOCK.settings;
 
-  // WhatsApp FAB
-  const fab = document.getElementById('whatsapp-fab');
-  if (fab && s.whatsapp) {
-    const msg = encodeURIComponent('Olá! Gostaria de saber mais sobre o BikeFit.');
-    fab.href = `https://wa.me/${s.whatsapp.replace(/\D/g, '')}?text=${msg}`;
+  // Email FAB
+  const fab = document.getElementById('email-fab');
+  if (fab) {
+    const configuredEmail = (s.email || '').trim();
+    const targetEmail = configuredEmail || MOCK.settings.email || 'contato@ranieldybikefit.com.br';
+    const subject = encodeURIComponent('Contato via site - BikeFit');
+    const body = encodeURIComponent('Ola! Gostaria de saber mais sobre o BikeFit.');
+    fab.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
   }
 
   // Footer socials

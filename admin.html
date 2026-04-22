@@ -6,14 +6,11 @@
   <title>Painel Admin — BikeFit</title>
   <meta name="robots" content="noindex, nofollow" />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Syne:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet" />
 
-  <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="admin-body">
@@ -22,6 +19,9 @@
        TELA DE LOGIN
        ============================================================ -->
   <div id="login-screen" class="admin-login">
+    <!-- Decorative glow -->
+    <div class="adm-login-glow" aria-hidden="true"></div>
+
     <div class="admin-login__box">
       <div class="admin-login__logo">
         <img src="assets/logo.png" alt="BikeFit" class="brand-logo brand-logo--admin-login" width="176" height="32" decoding="async" />
@@ -56,123 +56,104 @@
         <small class="admin-sidebar__brand-tag">Admin</small>
       </div>
 
-      <nav class="admin-sidebar__nav">
-        <button class="admin-nav-item active" data-panel="bookings" aria-current="page">
-          <span class="admin-nav-item__icon">🗓️</span> Agendamentos
+      <nav class="admin-sidebar__nav" role="navigation">
+        <button class="admin-nav-item active" data-panel="dashboard" aria-current="page">
+          <span class="admin-nav-item__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </span>
+          Dashboard
         </button>
-        <button class="admin-nav-item" data-panel="availability">
-          <span class="admin-nav-item__icon">⏰</span> Disponibilidade
-        </button>
+
         <button class="admin-nav-item" data-panel="testimonials">
-          <span class="admin-nav-item__icon">💬</span> Depoimentos
+          <span class="admin-nav-item__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </span>
+          Depoimentos
         </button>
+
         <button class="admin-nav-item" data-panel="faq">
-          <span class="admin-nav-item__icon">❓</span> FAQ
+          <span class="admin-nav-item__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <circle cx="12" cy="17" r="0.5" fill="currentColor"/>
+            </svg>
+          </span>
+          FAQ
         </button>
+
         <button class="admin-nav-item" data-panel="content">
-          <span class="admin-nav-item__icon">📝</span> Textos da LP
+          <span class="admin-nav-item__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <line x1="10" y1="9" x2="8" y2="9"/>
+            </svg>
+          </span>
+          Textos da LP
         </button>
+
         <button class="admin-nav-item" data-panel="settings">
-          <span class="admin-nav-item__icon">⚙️</span> Contato &amp; Redes
+          <span class="admin-nav-item__icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </span>
+          Contato &amp; Redes
         </button>
       </nav>
 
       <div class="admin-sidebar__footer">
-        <button class="btn btn--outline btn--sm btn--full" id="logout-btn">Sair</button>
+        <button class="btn btn--outline btn--sm btn--full adm-logout-btn" id="logout-btn" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Sair
+        </button>
       </div>
     </aside>
 
     <!-- Main -->
     <div class="admin-main">
       <header class="admin-topbar">
-        <h1 class="admin-topbar__title" id="panel-title">Agendamentos</h1>
-        <div class="admin-topbar__user">
-          <span id="admin-email-display"></span>
+        <h1 class="admin-topbar__title" id="panel-title">Dashboard</h1>
+        <div class="admin-topbar__actions">
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Alternar tema">🌙</button>
+          <div class="admin-topbar__user">
+            <span id="admin-email-display"></span>
+          </div>
         </div>
       </header>
 
       <div class="admin-content">
 
         <!-- ======================================================
-             PAINEL: AGENDAMENTOS
+             PAINEL: DASHBOARD
              ====================================================== -->
-        <div class="admin-panel active" id="panel-bookings">
-          <p class="admin-section-subtitle">Visualize e gerencie todos os agendamentos recebidos.</p>
-
-          <div class="admin-filters">
-            <label>Filtrar por status:
-              <select id="filter-status" class="form__select" style="margin-left:8px">
-                <option value="">Todos</option>
-                <option value="pendente">Pendente</option>
-                <option value="confirmado">Confirmado</option>
-                <option value="cancelado">Cancelado</option>
+        <div class="admin-panel active" id="panel-dashboard">
+          <p class="admin-section-subtitle">Acompanhe o funil de conversão e os principais indicadores da landing.</p>
+          <div class="admin-filters" style="margin-bottom:12px">
+            <label>Período:
+              <select id="dashboard-range" class="form__select" style="margin-left:8px">
+                <option value="7">Últimos 7 dias</option>
+                <option value="30" selected>Últimos 30 dias</option>
+                <option value="90">Últimos 90 dias</option>
               </select>
             </label>
-            <label>Data:
-              <input type="date" id="filter-date" style="margin-left:8px" />
-            </label>
-            <button class="btn btn--outline btn--sm" id="filter-clear">Limpar</button>
-            <button class="btn btn--outline btn--sm" id="export-csv" style="margin-left:auto">⬇ Exportar CSV</button>
           </div>
-
-          <div class="admin-table-wrapper">
-            <table class="admin-table" aria-label="Tabela de agendamentos">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>E-mail</th>
-                  <th>Telefone</th>
-                  <th>Modalidade</th>
-                  <th>Data</th>
-                  <th>Horário</th>
-                  <th>Status</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="bookings-tbody">
-                <tr><td colspan="8" style="text-align:center;padding:32px;color:var(--color-text-muted)">Carregando...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- ======================================================
-             PAINEL: DISPONIBILIDADE
-             ====================================================== -->
-        <div class="admin-panel" id="panel-availability">
-          <p class="admin-section-subtitle">Gerencie os dias e horários disponíveis para agendamento.</p>
-
-          <div class="avail-calendar">
+          <div id="dashboard-root">
             <div class="admin-card">
-              <div class="admin-card__title">Adicionar slot</div>
-              <div class="admin-card__subtitle">Habilite uma data e horário para agendamento</div>
-              <form id="slot-form">
-                <div class="form__group">
-                  <label class="form__label" for="slot-date">Data</label>
-                  <input type="date" id="slot-date" class="form__input" required />
-                </div>
-                <div class="form__group">
-                  <label class="form__label" for="slot-time">Horário</label>
-                  <input type="time" id="slot-time" class="form__input" required step="1800" />
-                </div>
-                <div class="form__group">
-                  <label class="form__label" for="slot-max">Vagas simultâneas</label>
-                  <input type="number" id="slot-max" class="form__input" value="1" min="1" max="10" />
-                </div>
-                <button type="submit" class="btn btn--primary btn--full">Adicionar Slot</button>
-              </form>
-            </div>
-
-            <div>
-              <div class="admin-card__title" style="margin-bottom:16px">Slots cadastrados</div>
-              <div class="admin-filters">
-                <label>Filtrar por data:
-                  <input type="date" id="avail-filter-date" style="margin-left:8px" />
-                </label>
-              </div>
-              <div class="avail-slots-list" id="slots-list">
-                <p style="color:var(--color-text-muted)">Carregando...</p>
-              </div>
+              <p style="color:var(--admin-text-muted)">Carregando dados do dashboard...</p>
             </div>
           </div>
         </div>
@@ -181,45 +162,23 @@
              PAINEL: DEPOIMENTOS
              ====================================================== -->
         <div class="admin-panel" id="panel-testimonials">
-          <p class="admin-section-subtitle">Gerencie os depoimentos exibidos na landing page.</p>
+          <p class="admin-section-subtitle">Modere os depoimentos enviados pelos clientes e compartilhe o link para novas avaliações.</p>
 
           <div class="admin-card">
-            <div class="admin-card__title" id="testimonial-form-title">Adicionar Depoimento</div>
-            <form id="testimonial-form">
-              <input type="hidden" id="t-id" />
-              <div class="form__row">
-                <div class="form__group">
-                  <label class="form__label" for="t-name">Nome *</label>
-                  <input id="t-name" class="form__input" type="text" required />
+            <div class="admin-card__title">Coleta de depoimentos</div>
+            <div class="form__row">
+              <div>
+                <img id="testimonial-qr" alt="QR Code para enviar depoimento" style="width:160px;height:160px;border-radius:6px;border:1px solid var(--admin-border)" />
+              </div>
+              <div>
+                <p style="margin:0 0 10px;color:var(--admin-text-muted);font-size:0.88rem">Compartilhe esse link com o cliente para envio:</p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <input id="testimonial-link" class="form__input" type="text" readonly style="min-width:260px;flex:1" />
+                  <button class="btn btn--outline btn--sm" id="copy-testimonial-link" type="button">Copiar link</button>
                 </div>
-                <div class="form__group">
-                  <label class="form__label" for="t-modality">Modalidade *</label>
-                  <input id="t-modality" class="form__input" type="text" placeholder="Ex: Ciclismo de Estrada" required />
-                </div>
+                <p id="testimonial-metrics" style="margin:14px 0 0;color:var(--admin-text-muted);font-size:0.85rem">Carregando média das avaliações...</p>
               </div>
-              <div class="form__group">
-                <label class="form__label" for="t-text">Depoimento *</label>
-                <textarea id="t-text" class="form__textarea" style="min-height:100px" required></textarea>
-              </div>
-              <div class="form__group">
-                <label class="form__label">Nota</label>
-                <div class="star-rating" id="star-rating">
-                  <input type="radio" name="rating" id="star5" value="5" checked /><label for="star5">★</label>
-                  <input type="radio" name="rating" id="star4" value="4" /><label for="star4">★</label>
-                  <input type="radio" name="rating" id="star3" value="3" /><label for="star3">★</label>
-                  <input type="radio" name="rating" id="star2" value="2" /><label for="star2">★</label>
-                  <input type="radio" name="rating" id="star1" value="1" /><label for="star1">★</label>
-                </div>
-              </div>
-              <div class="form__group">
-                <label class="form__label" for="t-photo">URL da foto (opcional)</label>
-                <input id="t-photo" class="form__input" type="url" placeholder="https://..." />
-              </div>
-              <div style="display:flex;gap:12px;flex-wrap:wrap">
-                <button type="submit" class="btn btn--primary">Salvar</button>
-                <button type="button" class="btn btn--outline btn--sm" id="t-cancel" style="display:none">Cancelar</button>
-              </div>
-            </form>
+            </div>
           </div>
 
           <div class="admin-table-wrapper" style="margin-top:8px">
@@ -227,14 +186,15 @@
               <thead>
                 <tr>
                   <th>Nome</th>
-                  <th>Modalidade</th>
+                  <th>Bike</th>
                   <th>Nota</th>
                   <th>Status</th>
+                  <th>Origem</th>
                   <th>Ações</th>
                 </tr>
               </thead>
               <tbody id="testimonials-tbody">
-                <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--color-text-muted)">Carregando...</td></tr>
+                <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--admin-text-muted)">Carregando...</td></tr>
               </tbody>
             </table>
           </div>
@@ -275,7 +235,7 @@
                 </tr>
               </thead>
               <tbody id="faq-tbody">
-                <tr><td colspan="3" style="text-align:center;padding:32px;color:var(--color-text-muted)">Carregando...</td></tr>
+                <tr><td colspan="3" style="text-align:center;padding:32px;color:var(--admin-text-muted)">Carregando...</td></tr>
               </tbody>
             </table>
           </div>
