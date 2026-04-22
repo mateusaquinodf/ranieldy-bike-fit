@@ -4,6 +4,9 @@
 
 import sb from './supabase.js';
 
+/** Recalcula comprimento da página para a barra de leitura (após conteúdo dinâmico). */
+let invalidateReadProgressLayout = () => {};
+
 const ANALYTICS_SESSION_KEY = 'bikefit_analytics_session_id';
 const PAGE_NAME = 'landing';
 
@@ -150,24 +153,42 @@ function initReadProgress() {
   if (!fill) return;
 
   let ticking = false;
+  let maxScroll = 1;
 
-  function update() {
+  function measureMaxScroll() {
     const root = document.documentElement;
-    const maxScroll = Math.max(0, root.scrollHeight - root.clientHeight);
-    const ratio = maxScroll <= 0 ? 1 : Math.min(1, Math.max(0, window.scrollY / maxScroll));
+    maxScroll = Math.max(1, root.scrollHeight - root.clientHeight);
+  }
+
+  function paint() {
+    const ratio = maxScroll <= 1 ? 1 : Math.min(1, Math.max(0, window.scrollY / maxScroll));
     fill.style.transform = `scaleX(${ratio})`;
     ticking = false;
   }
 
-  function requestUpdate() {
+  function requestPaint() {
     if (ticking) return;
     ticking = true;
-    requestAnimationFrame(update);
+    requestAnimationFrame(paint);
   }
 
-  window.addEventListener('scroll', requestUpdate, { passive: true });
-  window.addEventListener('resize', requestUpdate, { passive: true });
-  update();
+  function onResize() {
+    measureMaxScroll();
+    requestPaint();
+  }
+
+  invalidateReadProgressLayout = () => {
+    requestAnimationFrame(() => {
+      measureMaxScroll();
+      requestPaint();
+    });
+  };
+
+  window.addEventListener('scroll', requestPaint, { passive: true });
+  window.addEventListener('resize', onResize, { passive: true });
+
+  measureMaxScroll();
+  paint();
 }
 
 // ============================================================
@@ -194,7 +215,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadAvailableSlots(),
   ]);
 
-  window.dispatchEvent(new Event('resize'));
+  invalidateReadProgressLayout();
 
   // Atualiza ícones Lucide após injeção de HTML dinâmico
   if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -489,10 +510,13 @@ function renderCarousel(testimonials) {
   window.addEventListener('resize', () => {
     updateCarouselPerView();
     carouselIndex = 0;
-    updateCarouselPosition();
+    requestAnimationFrame(updateCarouselPosition);
   }, { passive: true });
 
-  updateCarouselPosition();
+  requestAnimationFrame(() => {
+    updateCarouselPosition();
+    invalidateReadProgressLayout();
+  });
 }
 
 // ============================================================

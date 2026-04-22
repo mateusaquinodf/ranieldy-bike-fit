@@ -337,7 +337,7 @@ body:has(button:hover) .cursor--ring {
   align-items: center;
 }
 
-/* Logo da marca — arquivo: assets/logo.png */
+/* Logo da marca — fallback: assets/logo.png; preferência: assets/logo-*.webp (picture no HTML) */
 .brand-logo {
   display: block;
   width: auto;

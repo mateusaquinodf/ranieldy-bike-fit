@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-  <link rel="preload" as="image" href="assets/hero-640.webp" fetchpriority="high" />
+  <link rel="preconnect" href="https://pvpzredpopoqlqqbckpx.supabase.co" crossorigin />
+  <link rel="preload" as="image" href="assets/hero-640-m.webp" fetchpriority="high" />
 
   <!-- URL canônica do site em produção (ajuste se o domínio for outro) -->
   <link rel="canonical" href="https://ranieldybikefit.com.br/" />
@@ -26,7 +27,7 @@
   <meta property="og:description" content="Bike Fit presencial em Brasília com análise de movimento (LEOMO + Velogic Studio), formação EBBT e laudo digital. Mais conforto, menos dor e melhor performance no pedal." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ranieldybikefit.com.br/" />
-  <meta property="og:image" content="https://ranieldybikefit.com.br/assets/hero-1280.webp" />
+  <meta property="og:image" content="https://ranieldybikefit.com.br/assets/hero-1280-m.webp" />
   <meta property="og:image:width" content="1280" />
   <meta property="og:image:height" content="853" />
   <meta property="og:image:alt" content="Bike Fit profissional em Brasília — Ranieldy Mendes" />
@@ -35,7 +36,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Bike Fit em Brasília | Ranieldy Mendes — EBBT" />
   <meta name="twitter:description" content="Ajuste biomecânico presencial com LEOMO, Velogic Studio e laudo em PDF. Agende em Brasília." />
-  <meta name="twitter:image" content="https://ranieldybikefit.com.br/assets/hero-1280.webp" />
+  <meta name="twitter:image" content="https://ranieldybikefit.com.br/assets/hero-1280-m.webp" />
 
   <link rel="alternate" hreflang="pt-BR" href="https://ranieldybikefit.com.br/" />
   <link rel="alternate" hreflang="x-default" href="https://ranieldybikefit.com.br/" />
@@ -63,8 +64,8 @@
         "alternateName": "Bike Fit Brasília — Ranieldy Mendes",
         "description": "Serviço de Bike Fit presencial: análise da pedalada com LEOMO e Velogic Studio, ajuste de selim, guidão e sapatilha, relatório em PDF. Atendimento em Brasília, Distrito Federal.",
         "url": "https://ranieldybikefit.com.br/",
-        "image": "https://ranieldybikefit.com.br/assets/hero-1280.webp",
-        "logo": "https://ranieldybikefit.com.br/assets/logo.png",
+        "image": "https://ranieldybikefit.com.br/assets/hero-1280-m.webp",
+        "logo": "https://ranieldybikefit.com.br/assets/logo-192.webp",
         "email": "contato@ranieldybikefit.com.br",
         "areaServed": {
           "@type": "AdministrativeArea",
@@ -133,7 +134,10 @@
   <header class="navbar" id="navbar" role="banner">
     <div class="container navbar__inner">
       <a href="#" class="navbar__logo" aria-label="BikeFit — Início">
-        <img src="assets/logo.png" alt="BikeFit" class="brand-logo brand-logo--nav" width="200" height="48" decoding="async" />
+        <picture>
+          <source type="image/webp" srcset="assets/logo-128.webp 128w, assets/logo-192.webp 192w" sizes="(max-width: 768px) 56px, 72px" />
+          <img src="assets/logo.png" alt="BikeFit" class="brand-logo brand-logo--nav" width="128" height="128" decoding="async" fetchpriority="low" />
+        </picture>
       </a>
 
       <nav class="navbar__nav" aria-label="Navegação principal">
@@ -188,10 +192,10 @@
     <section class="hero" id="hero" aria-label="Seção principal">
       <div class="hero__media" aria-hidden="true">
         <picture>
-          <source type="image/webp" srcset="assets/hero-640.webp 640w, assets/hero-960.webp 960w, assets/hero-1280.webp 1280w" sizes="100vw" />
+          <source type="image/webp" srcset="assets/hero-640-m.webp 640w, assets/hero-960-m.webp 960w, assets/hero-1280-m.webp 1280w" sizes="100vw" />
           <img
             class="hero__img"
-            src="assets/hero-960.webp"
+            src="assets/hero-960-m.webp"
             width="1280"
             height="853"
             alt=""
@@ -648,7 +652,10 @@
     <div class="container">
       <div class="footer__grid">
         <div>
-          <img src="assets/logo.png" alt="BikeFit" class="brand-logo brand-logo--footer" width="140" height="26" decoding="async" />
+          <picture>
+            <source type="image/webp" srcset="assets/logo-128.webp 128w" sizes="32px" />
+            <img src="assets/logo.png" alt="BikeFit" class="brand-logo brand-logo--footer" width="128" height="128" decoding="async" loading="lazy" fetchpriority="low" />
+          </picture>
           <p class="footer__brand-text" id="footer-brand-text">
             Bike Fit profissional e presencial em Brasília. Pedale mais, dói menos, rende mais.
           </p>
