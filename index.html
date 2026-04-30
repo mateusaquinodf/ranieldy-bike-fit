@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
   <link rel="preconnect" href="https://pvpzredpopoqlqqbckpx.supabase.co" crossorigin />
-  <link rel="preload" as="image" href="assets/hero-640-m.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="assets/estudio.png" fetchpriority="high" />
 
   <!-- URL canônica do site em produção (ajuste se o domínio for outro) -->
   <link rel="canonical" href="https://ranieldybikefit.com.br/" />
@@ -135,7 +135,7 @@
     <div class="container navbar__inner">
       <a href="#" class="navbar__logo" aria-label="BikeFit — Início">
         <picture>
-          <source type="image/webp" srcset="assets/logo-128.webp 128w, assets/logo-192.webp 192w" sizes="(max-width: 768px) 56px, 72px" />
+          <source type="image/webp" srcset="assets/logo-128.webp 128w, assets/logo-192.webp 192w" sizes="(max-width: 768px) 92px, 108px" />
           <img src="assets/logo.png" alt="BikeFit" class="brand-logo brand-logo--nav" width="128" height="128" decoding="async" fetchpriority="low" />
         </picture>
       </a>
@@ -146,6 +146,7 @@
         <a href="#tecnologias">Tecnologias</a>
         <a href="#depoimentos">Depoimentos</a>
         <a href="#agendamento">Agendar</a>
+        <a href="#localizacao">Localização</a>
         <a href="#faq">FAQ</a>
       </nav>
 
@@ -178,6 +179,7 @@
       <a href="#tecnologias">Tecnologias</a>
       <a href="#depoimentos">Depoimentos</a>
       <a href="#agendamento">Agendar</a>
+      <a href="#localizacao">Localização</a>
       <a href="#faq">FAQ</a>
     </div>
     <div class="navbar__drawer-footer">
@@ -191,18 +193,15 @@
          ============================================================ -->
     <section class="hero" id="hero" aria-label="Seção principal">
       <div class="hero__media" aria-hidden="true">
-        <picture>
-          <source type="image/webp" srcset="assets/hero-640-m.webp 640w, assets/hero-960-m.webp 960w, assets/hero-1280-m.webp 1280w" sizes="100vw" />
-          <img
-            class="hero__img"
-            src="assets/hero-960-m.webp"
-            width="1280"
-            height="853"
-            alt=""
-            fetchpriority="high"
-            decoding="async"
-          />
-        </picture>
+        <img
+          class="hero__img"
+          src="assets/estudio.png"
+          width="1408"
+          height="768"
+          alt=""
+          fetchpriority="high"
+          decoding="async"
+        />
       </div>
       <div class="hero__lines" aria-hidden="true"></div>
       <div class="hero__overlay" aria-hidden="true"></div>
@@ -213,7 +212,7 @@
             ✓ Atendimento Presencial em Brasília · Todos os níveis
           </div>
           <h1 class="hero__headline" id="hero-headline">
-            Pedale com mais conforto,<br /><em>menos dor e muito mais performance.</em>
+            Pedale com mais conforto e mais performance
           </h1>
           <p class="hero__subheadline" id="hero-subheadline">
             O Bike Fit certo transforma sua experiência na bicicleta. Com tecnologia de ponta e formação EBBT, Ranieldy Mendes ajusta sua bike ao seu corpo — para você pedalar do jeito que sempre quis, em Brasília.
@@ -537,26 +536,13 @@
     <!-- ============================================================
          DEPOIMENTOS
          ============================================================ -->
-    <section class="section testimonials section--alt" id="depoimentos" aria-labelledby="depoimentos-title">
+    <section class="section testimonials section--alt" id="depoimentos" aria-labelledby="depoimentos-title" hidden>
       <div class="container">
         <span class="section__label">Prova social</span>
         <h2 class="section__title" id="depoimentos-title">O que dizem quem<br /><em>já pedalou melhor</em></h2>
 
         <div class="testimonials__carousel" role="region" aria-label="Carrossel de depoimentos">
-          <div class="testimonials__track" id="testimonials-track">
-            <!-- Depoimentos injetados via JS -->
-            <div class="testimonial-card" style="opacity:0.4">
-              <div class="testimonial-card__stars" aria-label="5 estrelas">★★★★★</div>
-              <p class="testimonial-card__text">Carregando depoimentos...</p>
-              <div class="testimonial-card__author">
-                <div class="testimonial-card__avatar" aria-hidden="true">?</div>
-                <div>
-                  <div class="testimonial-card__name">—</div>
-                  <div class="testimonial-card__modality">—</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div class="testimonials__track" id="testimonials-track"></div>
         </div>
 
         <div class="testimonials__controls" aria-label="Controles do carrossel">
@@ -643,6 +629,75 @@
         </div>
       </div>
     </section>
+
+    <!-- ============================================================
+         LOCALIZAÇÃO
+         ============================================================ -->
+    <section class="section location-section" id="localizacao" aria-labelledby="localizacao-title">
+      <div class="container">
+        <span class="section__label">Onde atendemos</span>
+        <h2 class="section__title" id="localizacao-title">Localização</h2>
+        <p class="section__subtitle location-section__lead">
+          Atendimento presencial no espaço <strong>Gomão Bikes — Galpão</strong>, em Vicente Pires (Brasília&nbsp;–&nbsp;DF).
+        </p>
+
+        <div class="location__grid">
+          <div class="location__panel">
+            <a
+              href="https://gomaobikesdf.com.br/"
+              class="location__brand-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Gomão Bikes — abre o site em nova aba"
+            >
+              <img
+                src="assets/gomao.png"
+                alt="Gomão Bikes"
+                class="location__brand-img"
+                width="320"
+                height="120"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <address class="location__address">
+              <span class="location__address-name">Gomão Bikes — Galpão</span><br />
+              Rua 5, Chácara 121, Lote 03, Lojas 01 a 04<br />
+              Setor Habitacional Vicente Pires<br />
+              Brasília&nbsp;–&nbsp;DF · CEP 72.006-055
+            </address>
+            <p class="location__actions">
+              <a
+                href="https://www.google.com/maps/place/Gom%C3%A3o+Bikes+Galp%C3%A3o/data=!4m2!3m1!1s0x0:0x96a39962418c7cf?sa=X&amp;ved=1t:2428&amp;ictx=111"
+                class="location__link location__link--maps"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Abrir no Google Maps
+              </a>
+              <a
+                href="https://gomaobikesdf.com.br/"
+                class="location__link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Site Gomão Bikes
+              </a>
+            </p>
+          </div>
+          <div class="location__map-wrap">
+            <iframe
+              class="location__map"
+              title="Mapa: Gomão Bikes Galpão — Vicente Pires, Brasília"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Gom%C3%A3o+Bikes+Galp%C3%A3o+Vicente+Pires+Bras%C3%ADlia+DF&amp;output=embed&amp;hl=pt-BR&amp;z=16"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ============================================================
@@ -653,7 +708,7 @@
       <div class="footer__grid">
         <div>
           <picture>
-            <source type="image/webp" srcset="assets/logo-128.webp 128w" sizes="32px" />
+            <source type="image/webp" srcset="assets/logo-128.webp 128w, assets/logo-192.webp 192w" sizes="(max-width: 768px) 56px, 64px" />
             <img src="assets/logo.png" alt="BikeFit" class="brand-logo brand-logo--footer" width="128" height="128" decoding="async" loading="lazy" fetchpriority="low" />
           </picture>
           <p class="footer__brand-text" id="footer-brand-text">
@@ -672,6 +727,7 @@
             <li><a href="#tecnologias">Tecnologias</a></li>
             <li><a href="#depoimentos">Depoimentos</a></li>
             <li><a href="#agendamento">Agendar</a></li>
+            <li><a href="#localizacao">Localização</a></li>
             <li><a href="#faq">FAQ</a></li>
           </ul>
         </div>

@@ -36,14 +36,15 @@ async function trackEvent(eventName, eventMeta = {}) {
 // ============================================================
 const MOCK = {
   content: {
-    hero_headline:    'Pedale com mais conforto,<br /><em>menos dor e muito mais performance.</em>',
+    hero_headline:    'Pedale com mais conforto e mais performance',
     hero_subheadline: 'O Bike Fit certo transforma sua experiência na bicicleta. Com tecnologia de ponta e formação EBBT, Ranieldy Mendes ajusta sua bike ao seu corpo — para você pedalar do jeito que sempre quis, em Brasília.',
     hero_badge:       '✓ Atendimento Presencial em Brasília · Todos os níveis',
   },
 
   settings: {
     whatsapp:  '5511999999999',
-    instagram: 'https://instagram.com/',
+    /* URL completa do perfil (não só instagram.com) para o CTA do rodapé aparecer no fallback MOCK */
+    instagram: 'https://www.instagram.com/ranieldybikefit/',
     strava:    'https://strava.com/',
     youtube:   'https://youtube.com/',
     email:     'contato@ranieldybikefit.com.br',
@@ -764,15 +765,35 @@ async function loadContent() {
   if (subEl && map.hero_subheadline) subEl.textContent = map.hero_subheadline;
 }
 
+/** Mostra ou esconde a secção de depoimentos e os links #depoimentos (só com dados reais no Supabase). */
+function setDepoimentosSectionVisible(show) {
+  const section = document.getElementById('depoimentos');
+  if (section) {
+    section.hidden = !show;
+    section.setAttribute('aria-hidden', show ? 'false' : 'true');
+  }
+  document.querySelectorAll('a[href="#depoimentos"]').forEach((a) => {
+    const li = a.closest('li');
+    if (li) li.hidden = !show;
+    else a.hidden = !show;
+  });
+}
+
 async function loadTestimonials() {
-  const { data } = await sb
+  setDepoimentosSectionVisible(false);
+
+  const { data, error } = await sb
     .from('bfr_testimonials')
     .select('*')
     .eq('active', true)
     .eq('approved', true)
     .order('order', { ascending: true });
 
-  renderCarousel(data?.length ? data : MOCK.testimonials);
+  const list = !error && Array.isArray(data) ? data : [];
+  if (!list.length) return;
+
+  setDepoimentosSectionVisible(true);
+  renderCarousel(list);
 }
 
 function renderFaqListMarkup(items) {
@@ -834,6 +855,26 @@ async function loadFAQ() {
   initScrollReveal();
 }
 
+/** Extrai @utilizador a partir de URL do Instagram (para texto do CTA). */
+function instagramHandleFromUrl(url) {
+  try {
+    const u = new URL(url);
+    if (!u.hostname.replace(/^www\./, '').includes('instagram.com')) return 'Instagram';
+    const seg = u.pathname.split('/').filter(Boolean)[0];
+    if (!seg || ['p', 'reel', 'reels', 'stories', 'explore', 'accounts'].includes(seg)) return 'Instagram';
+    return `@${seg}`;
+  } catch {
+    return 'Instagram';
+  }
+}
+
+function isInstagramConfigured(url) {
+  const u = (url || '').trim();
+  if (!u || u.length < 12) return false;
+  if (/^https?:\/\/(www\.)?instagram\.com\/?$/i.test(u)) return false;
+  return /^https?:\/\/(www\.)?instagram\.com\//i.test(u);
+}
+
 async function loadSettings() {
   const { data } = await sb.from('bfr_settings').select('key, value');
   const s = data?.length
@@ -850,18 +891,32 @@ async function loadSettings() {
     fab.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
   }
 
-  // Footer socials
+  // Footer socials (Instagram em destaque + demais ícones)
   const socials = document.getElementById('footer-socials');
   if (socials) {
-    const links = [
-      { key: 'instagram', label: 'Instagram', icon: '📸' },
-      { key: 'strava',    label: 'Strava',    icon: '🚴' },
-      { key: 'youtube',   label: 'YouTube',   icon: '▶' },
-    ];
-    socials.innerHTML = links
-      .filter(l => s[l.key] && s[l.key] !== 'https://instagram.com/' && s[l.key].length > 10)
-      .map(l => `<a href="${s[l.key]}" class="footer__social" target="_blank" rel="noopener noreferrer" aria-label="${l.label}">${l.icon}</a>`)
+    const igHref = escapeHtml((s.instagram || '').trim());
+    const igBlock = isInstagramConfigured(s.instagram)
+      ? `<a href="${igHref}" class="footer__instagram-cta" target="_blank" rel="noopener noreferrer" aria-label="Instagram — abre em nova aba">
+          <span class="footer__instagram-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 6.6a5.4 5.4 0 1 0 0 10.8 5.4 5.4 0 0 0 0-10.8Zm0 8.9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm6.85-9.2a1.26 1.26 0 1 1-2.52 0 1.26 1.26 0 0 1 2.52 0Z" fill="#fff"/><path d="M6.4 2h11.2A4.4 4.4 0 0 1 22 6.4v11.2A4.4 4.4 0 0 1 17.6 22H6.4A4.4 4.4 0 0 1 2 17.6V6.4A4.4 4.4 0 0 1 6.4 2Zm11.2 1.8H6.4c-1.44 0-2.6 1.16-2.6 2.6v11.2c0 1.44 1.16 2.6 2.6 2.6h11.2c1.44 0 2.6-1.16 2.6-2.6V6.4c0-1.44-1.16-2.6-2.6-2.6Z" fill="#fff" fill-opacity=".92"/></svg>
+          </span>
+          <span class="footer__instagram-copy">
+            <span class="footer__instagram-eyebrow">Siga no Instagram</span>
+            <span class="footer__instagram-handle">${escapeHtml(instagramHandleFromUrl(s.instagram))}</span>
+          </span>
+        </a>`
+      : '';
+
+    const other = [
+      { key: 'strava', label: 'Strava', icon: '🚴' },
+      { key: 'youtube', label: 'YouTube', icon: '▶' },
+    ]
+      .filter(l => s[l.key] && String(s[l.key]).length > 10)
+      .map(l => `<a href="${escapeHtml(s[l.key])}" class="footer__social" target="_blank" rel="noopener noreferrer" aria-label="${l.label} — abre em nova aba">${l.icon}</a>`)
       .join('');
+
+    const othersRow = other ? `<div class="footer__socials-row">${other}</div>` : '';
+    socials.innerHTML = `${igBlock}${othersRow}`;
   }
 
   // Footer contact

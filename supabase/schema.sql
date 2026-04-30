@@ -88,7 +88,7 @@ CREATE INDEX IF NOT EXISTS idx_bfr_analytics_events_created_at
 -- ============================================================
 
 INSERT INTO bfr_content (key, value) VALUES
-  ('hero_headline',    'Seu corpo merece estar na posição certa.'),
+  ('hero_headline',    'Pedale com mais conforto e mais performance'),
   ('hero_subheadline', 'BikeFit profissional e presencial para ciclistas que querem pedalar mais, com menos dor e mais performance.'),
   ('hero_badge',       '✓ Atendimento Presencial · São Paulo, SP'),
   ('whatsapp_number',  '5511999999999'),
