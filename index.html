@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
   <link rel="preconnect" href="https://pvpzredpopoqlqqbckpx.supabase.co" crossorigin />
-  <link rel="preload" as="image" href="assets/estudio.png" fetchpriority="high" />
+  <link rel="preload" as="image" href="assets/estudio-720.webp" fetchpriority="high" />
 
   <!-- URL canônica do site em produção (ajuste se o domínio for outro) -->
   <link rel="canonical" href="https://ranieldybikefit.com.br/" />
@@ -27,16 +27,16 @@
   <meta property="og:description" content="Bike Fit presencial em Brasília com análise de movimento (LEOMO + Velogic Studio), formação EBBT e laudo digital. Mais conforto, menos dor e melhor performance no pedal." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ranieldybikefit.com.br/" />
-  <meta property="og:image" content="https://ranieldybikefit.com.br/assets/hero-1280-m.webp" />
-  <meta property="og:image:width" content="1280" />
-  <meta property="og:image:height" content="853" />
+  <meta property="og:image" content="https://ranieldybikefit.com.br/assets/estudio-1408.webp" />
+  <meta property="og:image:width" content="1408" />
+  <meta property="og:image:height" content="768" />
   <meta property="og:image:alt" content="Bike Fit profissional em Brasília — Ranieldy Mendes" />
 
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Bike Fit em Brasília | Ranieldy Mendes — EBBT" />
   <meta name="twitter:description" content="Ajuste biomecânico presencial com LEOMO, Velogic Studio e laudo em PDF. Agende em Brasília." />
-  <meta name="twitter:image" content="https://ranieldybikefit.com.br/assets/hero-1280-m.webp" />
+  <meta name="twitter:image" content="https://ranieldybikefit.com.br/assets/estudio-1408.webp" />
 
   <link rel="alternate" hreflang="pt-BR" href="https://ranieldybikefit.com.br/" />
   <link rel="alternate" hreflang="x-default" href="https://ranieldybikefit.com.br/" />
@@ -64,7 +64,7 @@
         "alternateName": "Bike Fit Brasília — Ranieldy Mendes",
         "description": "Serviço de Bike Fit presencial: análise da pedalada com LEOMO e Velogic Studio, ajuste de selim, guidão e sapatilha, relatório em PDF. Atendimento em Brasília, Distrito Federal.",
         "url": "https://ranieldybikefit.com.br/",
-        "image": "https://ranieldybikefit.com.br/assets/hero-1280-m.webp",
+        "image": "https://ranieldybikefit.com.br/assets/estudio-1408.webp",
         "logo": "https://ranieldybikefit.com.br/assets/logo-192.webp",
         "email": "contato@ranieldybikefit.com.br",
         "areaServed": {
@@ -193,15 +193,22 @@
          ============================================================ -->
     <section class="hero" id="hero" aria-label="Seção principal">
       <div class="hero__media" aria-hidden="true">
-        <img
-          class="hero__img"
-          src="assets/estudio.png"
-          width="1408"
-          height="768"
-          alt=""
-          fetchpriority="high"
-          decoding="async"
-        />
+        <picture>
+          <source
+            type="image/webp"
+            srcset="assets/estudio-720.webp 720w, assets/estudio-1120.webp 1120w, assets/estudio-1408.webp 1408w"
+            sizes="100vw"
+          />
+          <img
+            class="hero__img"
+            src="assets/estudio.png"
+            width="1408"
+            height="768"
+            alt=""
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
       </div>
       <div class="hero__lines" aria-hidden="true"></div>
       <div class="hero__overlay" aria-hidden="true"></div>

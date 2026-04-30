@@ -255,8 +255,9 @@ function initCursor() {
   const ring   = document.getElementById('cursor-ring');
   if (!cursor || !ring) return;
 
-  // Só ativa em desktop (pointer: fine)
+  // Só ativa em desktop (pointer: fine) e sem preferência por menos movimento
   if (!window.matchMedia('(pointer: fine)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   let ringX = 0, ringY = 0;
   let curX = 0,  curY = 0;
@@ -383,6 +384,14 @@ function initScrollReveal() {
   const els = document.querySelectorAll('.reveal');
   if (!els.length) return;
 
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    els.forEach((el) => {
+      el.classList.add('visible');
+      el.dataset.revealBound = '1';
+    });
+    return;
+  }
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -390,9 +399,13 @@ function initScrollReveal() {
         observer.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
 
-  els.forEach(el => observer.observe(el));
+  els.forEach((el) => {
+    if (el.dataset.revealBound) return;
+    el.dataset.revealBound = '1';
+    observer.observe(el);
+  });
 }
 
 // ============================================================

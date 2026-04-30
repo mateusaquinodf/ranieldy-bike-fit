@@ -121,7 +121,6 @@ input, textarea, select { font-family: var(--font-body); font-size: 1rem; cursor
   transform-origin: left center;
   background: linear-gradient(90deg, #e6b010, var(--color-primary) 40%, #fff4c4);
   box-shadow: 0 0 14px rgba(245, 197, 24, 0.55);
-  will-change: transform;
 }
 
 /* ---------- Grain Texture ---------- */
@@ -157,7 +156,6 @@ input, textarea, select { font-family: var(--font-body); font-size: 1rem; cursor
   transition: width 0.2s var(--ease-out-expo),
               height 0.2s var(--ease-out-expo),
               opacity 0.2s;
-  will-change: transform;
 }
 
 .cursor--ring {
@@ -173,7 +171,6 @@ input, textarea, select { font-family: var(--font-body); font-size: 1rem; cursor
               height 0.35s var(--ease-out-expo),
               border-color 0.35s,
               opacity 0.2s;
-  will-change: transform;
 }
 
 body:has(a:hover) .cursor,
@@ -194,7 +191,11 @@ body:has(button:hover) .cursor--ring {
   padding-inline: 32px;
 }
 
-.section { padding-block: var(--section-py); }
+.section {
+  padding-block: var(--section-py);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 560px;
+}
 .section--alt { background-color: var(--color-surface-alt); }
 
 .section__label {
@@ -5095,5 +5096,81 @@ body:has(button:hover) .cursor--ring {
   .cred-badge:last-child:nth-child(odd) {
     grid-column: 1 / -1;
     max-width: 100%;
+  }
+}
+
+/* ============================================================
+   PERFORMANCE — menos GPU no mobile e prefers-reduced-motion
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Textura animada: custo alto em telemóveis */
+  .grain {
+    display: none;
+  }
+
+  .hero__media {
+    animation: none;
+    transform: none;
+  }
+
+  .hero__badge {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .navbar.scrolled {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(232, 232, 230, 0.96);
+  }
+
+  .reveal {
+    transition-duration: 0.38s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    cursor: auto !important;
+  }
+
+  .cursor,
+  .cursor--ring {
+    display: none !important;
+  }
+
+  .grain,
+  .hero__media {
+    animation: none !important;
+  }
+
+  .hero__media {
+    transform: none;
+  }
+
+  .hero__accent-bar,
+  .hero__badge,
+  .hero__headline,
+  .hero__subheadline,
+  .hero__actions,
+  .hero__scroll,
+  .hero__microcopy {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero__scroll-line {
+    animation: none !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
